@@ -1,10 +1,10 @@
-# [Name of the Project] : [Team Number]
+# "Atom Phaser" [PLACEHOLDER] : Team #2
 # Members
 Project Manager: [Name] ([GitHub Name])\
 Communications Lead: [Name] ([GitHub Name])\
 Git Master: [Name] ([GitHub Name])\
 Design Lead: [Name] ([GitHub Name])\
-Quality Assurance Tester: [Name] ([GitHub Name])
+Quality Assurance Tester: Anthony Meiers (@bobbbbbbbbbbbbbbbbbbbbbbbb)
 
 # About Our Software
 
