@@ -16,7 +16,7 @@ Atom Phaser (Place Holder Name) is a top-down, puzzle-based, rogue-like game. Yo
 - Windows
 
 # Important Links
-Kanban Board: [link]\ <= Jira Link Goes Here
+Kanban Board: [link] <= Jira Link Goes Here \
 Designs: [link]\
 Styles Guide(s): [link]
 
