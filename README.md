@@ -1,26 +1,26 @@
-# "Atom Phaser" [PLACEHOLDER] : Team #2
+# "Atom Phaser" (PLACEHOLDER) : Team #2
 # Members
-Project Manager: [Name] ([GitHub Name])\
-Communications Lead: [Name] ([GitHub Name])\
-Git Master: [Name] ([GitHub Name])\
-Design Lead: [Name] ([GitHub Name])\
+Project Manager: Zavier Lamotte ([GitHub Name])\
+Communications Lead: Cole Salinas ([GitHub Name])\
+Git Master: Ulisess Munoz ([GitHub Name])\
+Design Lead: Ben Bertoni ([GitHub Name])\
 Quality Assurance Tester: Anthony Meiers (@bobbbbbbbbbbbbbbbbbbbbbbbb)
 
 # About Our Software
 
-Describe a little about what the project is about here.
-## Platforms Tested on
-- MacOS
+Atom Phaser (Place Holder Name) is a top-down, puzzle-based, rogue-like game. You play as a fat rat named ___ inside the "quantum world". The objective is to clear maps by completing puzzles, defeating enemies, and slaying the map's boss. This program was made on Unity and ported into a website to be played.
+
+## Platforms Tested on (TBA)
 - Android
 - iOS
-- Linux
 - Windows
+
 # Important Links
-Kanban Board: [link]\
+Kanban Board: [link]\ <= Jira Link Goes Here
 Designs: [link]\
 Styles Guide(s): [link]
 
-# How to Run Dev and Test Environment
+# How to Run Dev and Test Environment [TBA]
 
 ## Dependencies
 - List all dependencies here
