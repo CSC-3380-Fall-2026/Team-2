@@ -1,6 +1,6 @@
 # "Atom Phaser" (PLACEHOLDER) : Team #2
 # Members
-Project Manager: Zavier Lamotte ([GitHub Name])\
+Project Manager: Zavier Lamotte (Zaevir)\
 Communications Lead: Cole Salinas ([GitHub Name])\
 Git Master: Ulisess Munoz ([GitHub Name])\
 Design Lead: Ben Bertoni ([GitHub Name])\
