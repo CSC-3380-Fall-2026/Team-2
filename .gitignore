@@ -1,0 +1,43 @@
+# This .gitgnore file is here so we dont 
+# fill unneccassary code into github
+# 
+#  https:://github.com/github/gitignore/blob/main/Unity.gitignore
+#
+
+
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]obj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptueres/
+/[Rr]ecordings/
+
+
+
+.vs/
+.gradle/
+ExportedObj/
+.consulo/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+sysinfo.txt
+.unitypackage
+/[Aa]ssets/AddressableAssetsData/*/*.bin*
+/ServerData
