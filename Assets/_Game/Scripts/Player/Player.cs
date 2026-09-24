@@ -40,8 +40,13 @@ public class Player : MonoBehaviour
         currentState.Enter();
     }
 
-    void OnMove(InputValue input)
+    void OnMove(InputValue move)
     {
-        direction = input.Get<Vector2>();
+        direction = move.Get<Vector2>();
+    }
+
+    void OnSpin(InputValue spin)
+    {
+        ChangeState(new PlayerSpinState(this));
     }
 }
