@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     public float spinDeceleration = 1f;
     public float spinLaunchDelay = 0.5f;
     public bool isSpinning;
+    public bool isLaunching;
 
     [Header("Components")]
     public Rigidbody2D rb;
@@ -69,6 +70,14 @@ public class Player : MonoBehaviour
         if (currentState is PlayerSpinState spinState)
         {
             spinState.HandleSpinInput(isSpinning);
+        }
+    }
+
+    void OnShoot(InputValue shoot)
+    {
+        if (shoot != null)
+        {
+            isLaunching = true;
         }
     }
 
