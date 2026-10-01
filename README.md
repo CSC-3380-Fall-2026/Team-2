@@ -1,4 +1,4 @@
-# Rattom Phaser ™: Team #2
+# Rattom Phaser ™ : Team #2
 # Members
 Project Manager: Zavier Lamotte (Zaevir)\
 Communications Lead: Cole Salinas ([GitHub Name])\
