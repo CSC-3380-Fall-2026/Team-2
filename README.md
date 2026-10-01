@@ -8,7 +8,7 @@ Quality Assurance Tester: Anthony Meiers (@bobbbbbbbbbbbbbbbbbbbbbbbb)
 
 # About Our Software
 
-Atom Phaser (Place Holder Name) is a top-down, puzzle-based, rogue-like game. You play as a fat rat named ___ inside the "quantum world". The objective is to clear maps by completing puzzles, defeating enemies, and slaying the map's boss. This program was made on Unity and ported into a website to be played.
+Atom Phaser (Place Holder Name) is a top-down, puzzle-based, rogue-like game. You play as a fat rat named Nathaniel inside the "quantum world". The objective is to clear maps by completing puzzles, defeating enemies, and slaying the map's boss. This program was made on Unity and ported into a website to be played.
 
 ## Platforms Tested on (TBA)
 - Android
