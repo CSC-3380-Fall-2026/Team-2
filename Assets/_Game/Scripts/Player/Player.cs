@@ -32,9 +32,10 @@ public class Player : MonoBehaviour
 
     [Header("Components")]
     public Rigidbody2D rb;
-    public CircleCollider2D circleCollider;
+    public CircleCollider2D playerCollider;
     public GameObject playerObject;
     public GameObject cameraBounds;
+    public Vector2 cameraCenter;
     
     [Header("Movement Settings")]
     [SerializeField] public float acceleration = 0.1f;
@@ -46,6 +47,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         ChangeState(new PlayerIdleState(this));
+        cameraCenter = cameraBounds.transform.position;
     }
 
     void Update()
@@ -101,10 +103,34 @@ public class Player : MonoBehaviour
         }
     }
 
+    void HandlePhasing()
+    {
+        bool canPhase = rb.linearVelocity.magnitude >= phaseThreshold;
+        if (canPhase)
+        {
+            playerCollider.excludeLayers = phaseLayers;
+        }
+        else if (playerCollider.excludeLayers == phaseLayers)
+        {
+            Vector2 checkPosition = (Vector2)transform.position + playerCollider.offset;
+            Collider2D insideWall = Physics2D.OverlapCircle(checkPosition, playerCollider.radius, phaseLayers);
+            if (insideWall == null)
+            {
+                playerCollider.excludeLayers = 0;
+            }
+        }
+    }
+
     void OnUnBindCamera(InputValue UnBindCamera) // for debuggin mostly
     {
+        CenterCamera();
         isCameraBound = !isCameraBound;
         Debug.Log(isCameraBound);
+    }
+
+    void CenterCamera()
+    {
+            cameraBounds.transform.position = cameraCenter;
     }
 
 }
