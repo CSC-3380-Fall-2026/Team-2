@@ -63,6 +63,26 @@ public class Player : MonoBehaviour
         {
             cameraBounds.transform.position = playerObject.transform.position;
         }
+        if (gameObject.transform.position.x <= cameraBounds.transform.position.x -18)
+        {
+            EnterRoom(Vector2.left);
+            //OnUnBindCamera();
+        }
+        if (gameObject.transform.position.x >= cameraBounds.transform.position.x +18)
+        {
+            EnterRoom(Vector2.right);
+            //OnUnBindCamera();
+        }
+        if (gameObject.transform.position.y <= cameraBounds.transform.position.y -10)
+        {
+            EnterRoom(Vector2.down);
+            //OnUnBindCamera();
+        }
+        if (gameObject.transform.position.y >= cameraBounds.transform.position.y +10)
+        {
+            EnterRoom(Vector2.up);
+            //OnUnBindCamera();
+        }
     }
 
     public void ChangeState(PlayerState newState)
@@ -121,7 +141,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    void OnUnBindCamera(InputValue UnBindCamera) // for debuggin mostly
+    void OnUnBindCamera() // for debuggin mostly
     {
         CenterCamera();
         isCameraBound = !isCameraBound;
@@ -131,6 +151,46 @@ public class Player : MonoBehaviour
     void CenterCamera()
     {
             cameraBounds.transform.position = cameraCenter;
+    }
+
+    void EnterRoom(Vector2 roomDirection)
+    {
+        //temporary solution, later we will get the direct point to the enemies from save file
+        GameObject parentObj = GameObject.Find("leftRoom");;
+        if (roomDirection == Vector2.left)
+        {
+            //parentObj = GameObject.Find("leftRoom");
+            cameraCenter.x = cameraCenter.x -36;
+        }
+        if (roomDirection == Vector2.right)
+        {
+            //parentObj = GameObject.Find("rightRoom");
+            cameraCenter.x = cameraCenter.x + 36;
+        }
+        if (roomDirection == Vector2.up)
+        {
+            //parentObj = GameObject.Find("upRoom");
+            cameraCenter.y = cameraCenter.y + 20;
+        }
+        if (roomDirection == Vector2.down)
+        {
+            //parentObj = GameObject.Find("downRoom");
+            cameraCenter.y = cameraCenter.y - 20;
+        }
+        CenterCamera();
+
+        if (parentObj != null)
+        {
+            // 2. Search the parent's children (works even if "Secret_Door" is disabled)
+            Transform childTransform = parentObj.transform.Find("example enemy");
+            
+            if (childTransform != null)
+            {
+                GameObject exampleEnemy = childTransform.gameObject;
+                // You can now activate it:
+                exampleEnemy.SetActive(true);
+            }
+        }
     }
 
 }
