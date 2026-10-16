@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerMoveState : PlayerState
 {
     public PlayerMoveState(Player player) : base(player){}
-
+    
     public override void Enter()
     {
         base.Enter();
