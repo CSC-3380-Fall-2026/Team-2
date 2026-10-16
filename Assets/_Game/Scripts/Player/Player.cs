@@ -1,11 +1,22 @@
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class Player : MonoBehaviour
 {
     public PlayerState currentState;
+    private Coroutine speedResetCoroutine;
+    
+    [Header("Phase Settings")]
+    public float phaseThreshold = 15f;
+    public LayerMask phaseLayers;
+    
+    [Header("Bounce Settings")]
+    public PhysicsMaterial2D bounceMaterial;
+    public float bounceSpeedMultiplier = 2f;
+    public float bounceSpeedDuration = 1f;
     
     [Header("Spin Settings")]
     public float currentCharge;
@@ -28,7 +39,7 @@ public class Player : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] public float acceleration = 0.1f;
     [SerializeField] public float deceleration = 0.2f;
-    [SerializeField] public float maxSpeed = 10f;
+    [SerializeField] public float maxSpeed = 20f;
     
     public Vector2 direction;
 
@@ -40,6 +51,7 @@ public class Player : MonoBehaviour
     void Update()
     {
         currentState.Update();
+        HandlePhasing();
     }
 
     void FixedUpdate()
