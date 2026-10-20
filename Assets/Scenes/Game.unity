@@ -1725,7 +1725,7 @@ TilemapCollider2D:
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 43f513438fc5128479c163acb893fb65, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -422698,15 +422698,15 @@ MonoBehaviour:
   phaseLayers:
     serializedVersion: 2
     m_Bits: 8
-  bounceMaterial: {fileID: 0}
+  bounceMaterial: {fileID: 6200000, guid: 43f513438fc5128479c163acb893fb65, type: 2}
   bounceSpeedMultiplier: 2
   bounceSpeedDuration: 1
+  maxBounceSpeed: 60
   currentCharge: 0
   chargePerMash: 4
   maxCharge: 30
   spinDecayRate: 2
   spinDeceleration: 1
-  spinLaunchDelay: 0.5
   isCameraBound: 1
   isSpinning: 0
   isLaunching: 0
