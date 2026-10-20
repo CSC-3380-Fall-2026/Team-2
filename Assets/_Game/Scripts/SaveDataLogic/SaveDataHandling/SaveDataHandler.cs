@@ -3,22 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-//Save Data Handling
-public class SaveDataHandler : MonoBehaviour {
+//Save Data Handler, manages all the logic that relating to save files currently.
+public class saveDataHandler : MonoBehaviour {
 
 [SerializeField] private string saveName;
 
 //From SaveData.cs Script
 private SaveData saveData;
-private List<intSaveData> SaveDataObjects;
+private List<iSaveData> SaveDataObjects;
 
 //Creates a new instance of the saveFileHandler class, which is used to load and save data to a file.
 private saveFileHandler saveHandler;
-    public static SaveDataHandler instance { get; private set; }
+    public static saveDataHandler instance { get; private set; }
     
     private void Awake() {
         if (instance != null) {
-            Debug.LogError("Multiple SaveDataHandler instances found! SavaDataHandler.cs ln19");
+            Debug.LogError("Multiple saveDataHandler instances found! SavaDataHandler.cs ln19");
         }
         else {
             instance = this;
@@ -44,21 +44,20 @@ private saveFileHandler saveHandler;
         this.saveData = saveHandler.Load();
 
         if (this.saveData == null) {
-            Debug.Log("No save file found, creating new save file: SaveDataHandler.cs ln49");
+            Debug.Log("No save file found, creating new save file: saveDataHandler.cs ln49");
             newSave();
         }
 
-        foreach (intSaveData saveDataObject in SaveDataObjects) {
+        foreach (iSaveData saveDataObject in SaveDataObjects) {
             saveDataObject.loadData(saveData);
         }
     }
 
     //Saves the data to the save file.
     public void saveFile() {
-        foreach (intSaveData saveDataObject in SaveDataObjects) {
+        foreach (iSaveData saveDataObject in SaveDataObjects) {
             saveDataObject.saveData(ref saveData);
         }
-    
         saveHandler.Save(saveData);
     }
 
@@ -66,8 +65,8 @@ private saveFileHandler saveHandler;
         saveFile();
     }
 
-    private List<intSaveData> findSaveDataObjects() {
-    IEnumerable<intSaveData> saveDataObjects = FindObjectsOfType<MonoBehaviour>().OfType<intSaveData>();
-    return new List<intSaveData>(saveDataObjects); 
+    //fixed line to a non depreciated version.
+    private List<iSaveData> findSaveDataObjects() {
+    return FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include).OfType<iSaveData>().ToList(); 
     }
 }

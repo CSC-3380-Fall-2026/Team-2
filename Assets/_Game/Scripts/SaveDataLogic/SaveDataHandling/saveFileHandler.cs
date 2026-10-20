@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.IO;
+//Current File Path is iirc: 
+//"C:\Users\(USERNAMEHERE)\AppData\LocalLow\ZABCU Games\AtomPhaser-unity"
 
 //Handles the loading and saving of data to a file.
 public class saveFileHandler {
