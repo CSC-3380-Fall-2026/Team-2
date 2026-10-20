@@ -17,6 +17,7 @@ public class Player : MonoBehaviour
     public PhysicsMaterial2D bounceMaterial;
     public float bounceSpeedMultiplier = 2f;
     public float bounceSpeedDuration = 1f;
+    public float maxBounceSpeed = 60f;
     
     [Header("Spin Settings")]
     public float currentCharge;
@@ -24,7 +25,6 @@ public class Player : MonoBehaviour
     public float maxCharge = 30f;
     public float spinDecayRate = 2f;
     public float spinDeceleration = 1f;
-    public float spinLaunchDelay = 0.5f;
     public bool isCameraBound = true;
     public bool isSpinning;
     public bool isLaunching;
@@ -120,6 +120,31 @@ public class Player : MonoBehaviour
             }
         }
     }
+    
+    //For the Player Bounce, The player must collide with a surface that has the same bounce material
+    void OnCollisionEnter2D(Collision2D bounce)
+    {
+        if (bounce.collider.sharedMaterial != bounceMaterial)
+        {
+            return;
+        }
+
+        maxSpeed = Mathf.Min(bounce.relativeVelocity.magnitude * bounceSpeedMultiplier, maxBounceSpeed);
+
+        if (speedResetCoroutine != null)
+        {
+            StopCoroutine(speedResetCoroutine);
+        }
+
+        speedResetCoroutine = StartCoroutine(ResetMaxSpeed());
+    }
+    
+    IEnumerator ResetMaxSpeed()
+    {
+        yield return new WaitForSeconds(bounceSpeedDuration);
+        maxSpeed = 20f;
+    }
+
 
     void OnUnBindCamera(InputValue UnBindCamera) // for debuggin mostly
     {
