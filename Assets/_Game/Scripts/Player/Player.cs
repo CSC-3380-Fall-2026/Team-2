@@ -59,30 +59,7 @@ public class Player : MonoBehaviour
     void FixedUpdate()
     {
         currentState.PhysicsUpdate();
-        if (!isCameraBound)
-        {
-            cameraBounds.transform.position = playerObject.transform.position;
-        }
-        if (gameObject.transform.position.x <= cameraBounds.transform.position.x -18)
-        {
-            EnterRoom(Vector2.left);
-            //OnUnBindCamera();
-        }
-        if (gameObject.transform.position.x >= cameraBounds.transform.position.x +18)
-        {
-            EnterRoom(Vector2.right);
-            //OnUnBindCamera();
-        }
-        if (gameObject.transform.position.y <= cameraBounds.transform.position.y -10)
-        {
-            EnterRoom(Vector2.down);
-            //OnUnBindCamera();
-        }
-        if (gameObject.transform.position.y >= cameraBounds.transform.position.y +10)
-        {
-            EnterRoom(Vector2.up);
-            //OnUnBindCamera();
-        }
+        checkRoom();
     }
 
     public void ChangeState(PlayerState newState)
@@ -176,6 +153,34 @@ public class Player : MonoBehaviour
     void CenterCamera()
     {
             cameraBounds.transform.position = cameraCenter;
+    }
+
+    void checkRoom ()
+    {
+        if (!isCameraBound)
+        {
+            cameraBounds.transform.position = playerObject.transform.position;
+        }
+        if (gameObject.transform.position.x <= cameraBounds.transform.position.x -18)
+        {
+            EnterRoom(Vector2.left);
+            //OnUnBindCamera();
+        }
+        if (gameObject.transform.position.x >= cameraBounds.transform.position.x +18)
+        {
+            EnterRoom(Vector2.right);
+            //OnUnBindCamera();
+        }
+        if (gameObject.transform.position.y <= cameraBounds.transform.position.y -10)
+        {
+            EnterRoom(Vector2.down);
+            //OnUnBindCamera();
+        }
+        if (gameObject.transform.position.y >= cameraBounds.transform.position.y +10)
+        {
+            EnterRoom(Vector2.up);
+            //OnUnBindCamera();
+        }
     }
 
     void EnterRoom(Vector2 roomDirection)
