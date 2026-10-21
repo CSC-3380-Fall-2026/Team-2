@@ -32,11 +32,11 @@ public class saveFileHandler {
                 loadedData = JsonUtility.FromJson<SaveData>(loadData);
             } 
             catch (Exception e) {
-                Debug.LogError("Failed to load data: saveFileHandler ln30");
+                Debug.LogError($"Failed to load data: saveFileHandler ln30 {e}");
             }
         }
         else {
-            Debug.LogWarning("Save file not found: saveFileHandler ln34");
+            Debug.LogWarning("Save file not found: saveFileHandler ln34 ");
         }
         return loadedData;
     }
@@ -54,7 +54,7 @@ public class saveFileHandler {
             }
         } 
         catch (Exception e) {
-            Debug.LogError("Failed to save data: saveFileHandler ln28");
+            Debug.LogError($"$Failed to save data: saveFileHandler ln57 {e}");
         }
     }
 }
