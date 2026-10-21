@@ -41,3 +41,7 @@ sysinfo.txt
 .unitypackage
 /[Aa]ssets/AddressableAssetsData/*/*.bin*
 /ServerData
+Assets/Tests.meta
+Assets/Tests/Editor.meta
+Assets/Tests/Editor/SaveSystemTest.cs.meta
+Assets/Tests/Editor/SaveSystemTest.cs
