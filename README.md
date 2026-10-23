@@ -4,7 +4,7 @@ Project Manager: Zavier Lamotte (Zaevir)\
 Communications Lead: Cole Salinas ([GitHub Name])\
 Git Master: Ulisess Munoz ([GitHub Name])\
 Design Lead: Ben Bertoni ([GitHub Name])\
-Quality Assurance Tester: Anthony Meiers (@bobbbbbbbbbbbbbbbbbbbbbbbb)
+Quality Assurance Tester: Anthony Meiers (@bobbbbbbbbbbbbbbbbbbbbbbbb)\
 Quality Assurance Tester: Malcolm Jones (@MalcolmJ-Cyber)
 
 # About Our Software
