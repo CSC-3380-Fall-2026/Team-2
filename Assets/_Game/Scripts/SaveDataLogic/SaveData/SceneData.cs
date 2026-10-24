@@ -33,7 +33,7 @@ public class SceneData {
 
     void onEnemyDeath(string enemyName)
     {
-        byte enemyId = 0;
+        int enemyId = 0;
         if(enemyNameList.Contains(enemyName))
         {
             enemyId = enemyNameList.IndexOf(enemyName);//caps at 255 (should be plenty enough)

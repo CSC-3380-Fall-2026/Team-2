@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class CameraManager : MonoBehaviour
 {
     public Player playerScript;
+    GameObject playerObj;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     /*void Start()
     {
@@ -38,7 +39,8 @@ public class CameraManager : MonoBehaviour
         
         // Put the code you want to run every time here:
         //ResetLevelVariables();
-        playerScript = Object.FindAnyObjectByType<Player>(); 
+        playerObj = GameObject.FindWithTag("Player");
+        playerScript = playerObj.GetComponent<Player>();
         playerScript.getCameraBounds();
     }
 

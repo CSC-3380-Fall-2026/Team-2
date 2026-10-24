@@ -52,9 +52,11 @@ public class Player : MonoBehaviour
         {
             instance = this;
             DontDestroyOnLoad(playerObject);
+            gameObject.tag = "Player";
         }
         else 
         {
+            Debug.Log($"Destroyed Clone");
             Destroy(playerObject);
         }
         ChangeState(new PlayerIdleState(this));
@@ -252,6 +254,7 @@ public class Player : MonoBehaviour
     {
         cameraBounds = GameObject.Find("CameraBounds");
         cameraCenter = cameraBounds.transform.position;
+        CenterCamera();
     }
 
 }
