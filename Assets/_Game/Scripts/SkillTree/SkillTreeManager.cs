@@ -1,45 +1,29 @@
 using UnityEngine;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+
 
 public class SkillTreeManager : MonoBehaviour
 {
     public int skillPoints = 0;
     public List<Skill> skills = new List<Skill>();
 
-    public bool UnlockSkill(string skillName)
+    void Awake()
     {
-        Skill skill = skills.Find(
-            s => s.skillName == skillName
-        );
-
-        if (skill == null)
-        {
-            return false;
-        }
-
-        if (skill.isUnlocked)
-        {
-            return false;
-        }
-        
-        foreach (string prerequisite in skill.prerequisites)
-        {
-            Skill requiredSkill = skills.Find(
-                s => s.skillName == prerequisite
-            );
-        
-
-        if(requiredSkill == null || !requiredSkill.isUnlocked)
+         skills = new List<Skill>
+         {
+            new Skill
             {
-                return false;
+                skillName = "Shield", 
+                cost = 3
+            },
+
+            new Skill
+            {
+                skillName = "Max Speed 1",
+                cost = 1
             }
 
-       }
-
-       skillPoints -= skill.cost;
-       skill.isUnlocked = true;
-
-       return true;
+         };
     }
-}
+
+  }
