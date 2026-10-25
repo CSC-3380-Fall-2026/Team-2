@@ -14,6 +14,7 @@ public class saveDataHandler : MonoBehaviour {
 //From SaveData.cs Script
 private SaveData saveData;
 private List<iSaveData> SaveDataObjects;
+private SceneData sceneData;
 
 //Creates a new instance of the saveFileHandler class, which is used to load and save data to a file.
 private saveFileHandler saveHandler;
