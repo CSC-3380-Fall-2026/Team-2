@@ -3,6 +3,7 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public CircleCollider2D playerCollider;
     public GameObject playerObject;
+    private static Player instance;
     public GameObject cameraBounds;
     public Vector2 cameraCenter;
     
@@ -46,8 +48,19 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        if(instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(playerObject);
+            gameObject.tag = "Player";
+        }
+        else 
+        {
+            Debug.Log($"Destroyed Clone");
+            Destroy(playerObject);
+        }
         ChangeState(new PlayerIdleState(this));
-        cameraCenter = cameraBounds.transform.position;
+        getCameraBounds();
     }
 
     void Update()
@@ -186,7 +199,9 @@ public class Player : MonoBehaviour
     void EnterRoom(Vector2 roomDirection)
     {
         //temporary solution, later we will get the direct point to the enemies from save file
+        Debug.Log("Enter new room");
         GameObject parentObj = GameObject.Find("leftRoom");;
+        Scene currentScene = SceneManager.GetActiveScene();
         if (roomDirection == Vector2.left)
         {
             //parentObj = GameObject.Find("leftRoom");
@@ -201,10 +216,22 @@ public class Player : MonoBehaviour
         {
             //parentObj = GameObject.Find("upRoom");
             cameraCenter.y = cameraCenter.y + 20;
+            if (currentScene.name == "Game") //the following lines should reside in a statement that checks if the next room is in another scene
+            {   
+                SceneManager.LoadScene("Game 2");
+                Vector2 tempPosition;
+                tempPosition.x = gameObject.transform.position.x%20;
+                tempPosition.y = gameObject.transform.position.y%10;
+                gameObject.transform.position = tempPosition;
+                //gameObject.transform.position = gameObject.transform.position - new Vector2(20*(gameObject.transform.position.x/20),10*(gameObject.transform.position.y/10));
+            }
+            cameraBounds = GameObject.Find("CameraBounds");
         }
         if (roomDirection == Vector2.down)
         {
             //parentObj = GameObject.Find("downRoom");
+            if (currentScene.name == "Game 2")
+            {SceneManager.LoadScene("Game");}
             cameraCenter.y = cameraCenter.y - 20;
         }
         CenterCamera();
@@ -221,6 +248,13 @@ public class Player : MonoBehaviour
                 exampleEnemy.SetActive(true);
             }
         }
+    }
+
+    public void getCameraBounds ()
+    {
+        cameraBounds = GameObject.Find("CameraBounds");
+        cameraCenter = cameraBounds.transform.position;
+        CenterCamera();
     }
 
 }
