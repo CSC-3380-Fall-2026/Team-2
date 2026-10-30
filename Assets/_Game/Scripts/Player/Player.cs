@@ -35,10 +35,10 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public CircleCollider2D playerCollider;
     public GameObject playerObject;
-    private static Player instance;
-    public GameObject cameraBounds;
-    public Vector2 cameraCenter;
-    public CameraManager cameraManager;
+    [SerializeField] private static Player instance;
+    [SerializeField] public GameObject cameraBounds;
+    [SerializeField] public Vector2 cameraCenter;
+    [SerializeField] public CameraManager cameraManager;
     
     [Header("Movement Settings")]
     [SerializeField] public float acceleration = 0.1f;
@@ -166,8 +166,11 @@ public class Player : MonoBehaviour
 
     public void CenterCamera(Vector2 center,Vector2 bounds)
     {
+            cameraCenter = center;
             cameraBounds.transform.position = center;
+            Debug.Log(cameraBounds.transform.position);
             cameraBounds.transform.localScale = bounds;
+            //Debug.Log(cameraBounds.transform.localScale);
     }
 
     void checkRoom ()
@@ -180,21 +183,25 @@ public class Player : MonoBehaviour
         {
             cameraManager.EnterRoom(Vector2.left, cameraCenter, cameraBounds.transform.localScale);
             //OnUnBindCamera();
+            Debug.Log("Enter left");
         }
         if (gameObject.transform.position.x >= cameraBounds.transform.position.x +18)
         {
             cameraManager.EnterRoom(Vector2.right, cameraCenter, cameraBounds.transform.localScale);
             //OnUnBindCamera();
+            Debug.Log("Enter right");
         }
         if (gameObject.transform.position.y <= cameraBounds.transform.position.y -10)
         {
             cameraManager.EnterRoom(Vector2.down, cameraCenter, cameraBounds.transform.localScale);
             //OnUnBindCamera();
+            Debug.Log("Enter down");
         }
         if (gameObject.transform.position.y >= cameraBounds.transform.position.y +10)
         {
             cameraManager.EnterRoom(Vector2.up, cameraCenter, cameraBounds.transform.localScale);
             //OnUnBindCamera();
+            Debug.Log("Enter up");
         }
     }
 

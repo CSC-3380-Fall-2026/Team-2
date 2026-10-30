@@ -1,16 +1,16 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class CameraManager : MonoBehaviour
 {
-    public Player playerScript;
     GameObject playerObj;
+    public Player playerScript;
     public SceneData sceneData;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        playerScript = Object.FindAnyObjectByType<Player>(); 
-        playerScript.getCameraBounds();
+        StartCoroutine(FindPlayer());
 
     }
 
@@ -40,8 +40,26 @@ public class CameraManager : MonoBehaviour
         
         // Put the code you want to run every time here:
         //ResetLevelVariables();
-        playerObj = GameObject.FindWithTag("Player");
-        playerScript = playerObj.GetComponent<Player>();
+        StartCoroutine(FindPlayer());
+    }
+
+    private IEnumerator FindPlayer()
+    {
+        // Wait until the player exists
+        while (playerObj == null)
+        {
+            playerObj = GameObject.FindWithTag("Player");
+            yield return null;
+        }
+
+        // Wait until we have the player Script
+        while (playerScript == null)
+        {
+            playerScript = playerObj.GetComponent<Player>();
+            yield return null;
+        }
+
+        //Get the camera bounds
         playerScript.getCameraBounds();
     }
 
@@ -53,38 +71,42 @@ public class CameraManager : MonoBehaviour
 
     public void EnterRoom(Vector2 roomDirection, Vector2 cameraCenter, Vector2 cameraBounds)
     {
-        SceneData nextRoomData = null;
+        //SceneData nextRoomData = null;
         //temporary solution, later we will get the direct point to the enemies from save file
-        Debug.Log("Enter new room");
+        //Debug.Log("Enter new room");
         //Scene currentScene = SceneManager.GetActiveScene();
         
         if (roomDirection == Vector2.left)
         {
             cameraCenter.x = cameraCenter.x -36;
-            nextRoomData = sceneData.leftRoom;
+            //Debug.Log(cameraCenter);
+            //nextRoomData = sceneData.leftRoom;
         }
         if (roomDirection == Vector2.right)
         {
             cameraCenter.x = cameraCenter.x + 36;
-            nextRoomData = sceneData.rightRoom;
+            //Debug.Log(cameraCenter);
+            //nextRoomData = sceneData.rightRoom;
         }
         if (roomDirection == Vector2.up)
         {
             cameraCenter.y = cameraCenter.y + 20;
-            nextRoomData = sceneData.upRoom;
+            //Debug.Log(cameraCenter);
+            //nextRoomData = sceneData.upRoom;
         }
         if (roomDirection == Vector2.down)
         {
             cameraCenter.y = cameraCenter.y - 20;
-            nextRoomData = sceneData.downRoom;
+            //Debug.Log(cameraCenter);
+            //nextRoomData = sceneData.downRoom;
         }
-        if (sceneData.currentScene!=nextRoomData.currentScene)
+        /*if (sceneData.currentScene!=nextRoomData.currentScene)
         {
             SceneManager.LoadScene(nextRoomData.currentScene);
-        }
-        sceneData = nextRoomData;
-        cameraCenter = sceneData.roomCenter;
-        cameraBounds = sceneData.roomBounds;
+        }*/
+        //sceneData = nextRoomData;
+        //cameraCenter = sceneData.roomCenter;
+        //cameraBounds = sceneData.roomBounds;
         playerScript.CenterCamera(cameraCenter, cameraBounds);
     }
 }
