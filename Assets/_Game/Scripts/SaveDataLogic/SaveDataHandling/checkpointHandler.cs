@@ -34,7 +34,6 @@ public class CheckPointHandler : MonoBehaviour, iSaveData {
 
         //Checkpoint data goes here!
         saveDataHandler.instance.saveFile();
-        Debug.Log("Save Called.");
     }
 
     //Searches for nearest checkpoint in range, via math calculations.
@@ -54,11 +53,7 @@ public class CheckPointHandler : MonoBehaviour, iSaveData {
                 nearestDistanceSquared = distanceSquared;
                 nearestCheckpoint = checkpoint;
             }
-        
         }
-
-        Debug.Log($"Nearest distance squared: {nearestDistanceSquared}");
-        Debug.Log($"Nearest checkpoint: {nearestCheckpoint}");
 
         return nearestCheckpoint;
     }
