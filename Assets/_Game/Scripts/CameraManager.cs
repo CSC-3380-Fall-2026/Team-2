@@ -5,8 +5,9 @@ public class CameraManager : MonoBehaviour
 {
     public Player playerScript;
     GameObject playerObj;
+    public SceneData sceneData;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    /*void Start()
+    void Start()
     {
         playerScript = Object.FindAnyObjectByType<Player>(); 
         playerScript.getCameraBounds();
@@ -17,7 +18,7 @@ public class CameraManager : MonoBehaviour
     void Update()
     {
         
-    }*/
+    }
 
 
     private void OnEnable()
@@ -47,5 +48,43 @@ public class CameraManager : MonoBehaviour
     private void ResetLevelVariables()
     {
         // Your logic here
+    }
+
+
+    public void EnterRoom(Vector2 roomDirection, Vector2 cameraCenter, Vector2 cameraBounds)
+    {
+        SceneData nextRoomData = null;
+        //temporary solution, later we will get the direct point to the enemies from save file
+        Debug.Log("Enter new room");
+        //Scene currentScene = SceneManager.GetActiveScene();
+        
+        if (roomDirection == Vector2.left)
+        {
+            cameraCenter.x = cameraCenter.x -36;
+            nextRoomData = sceneData.leftRoom;
+        }
+        if (roomDirection == Vector2.right)
+        {
+            cameraCenter.x = cameraCenter.x + 36;
+            nextRoomData = sceneData.rightRoom;
+        }
+        if (roomDirection == Vector2.up)
+        {
+            cameraCenter.y = cameraCenter.y + 20;
+            nextRoomData = sceneData.upRoom;
+        }
+        if (roomDirection == Vector2.down)
+        {
+            cameraCenter.y = cameraCenter.y - 20;
+            nextRoomData = sceneData.downRoom;
+        }
+        if (sceneData.currentScene!=nextRoomData.currentScene)
+        {
+            SceneManager.LoadScene(nextRoomData.currentScene);
+        }
+        sceneData = nextRoomData;
+        cameraCenter = sceneData.roomCenter;
+        cameraBounds = sceneData.roomBounds;
+        playerScript.CenterCamera(cameraCenter, cameraBounds);
     }
 }

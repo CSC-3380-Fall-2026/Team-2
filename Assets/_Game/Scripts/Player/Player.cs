@@ -38,6 +38,7 @@ public class Player : MonoBehaviour
     private static Player instance;
     public GameObject cameraBounds;
     public Vector2 cameraCenter;
+    public CameraManager cameraManager;
     
     [Header("Movement Settings")]
     [SerializeField] public float acceleration = 0.1f;
@@ -158,14 +159,15 @@ public class Player : MonoBehaviour
 
     void OnUnBindCamera() // for debuggin mostly
     {
-        CenterCamera();
+        CenterCamera(cameraCenter, cameraBounds.transform.localScale);
         isCameraBound = !isCameraBound;
         Debug.Log(isCameraBound);
     }
 
-    void CenterCamera()
+    public void CenterCamera(Vector2 center,Vector2 bounds)
     {
-            cameraBounds.transform.position = cameraCenter;
+            cameraBounds.transform.position = center;
+            cameraBounds.transform.localScale = bounds;
     }
 
     void checkRoom ()
@@ -176,27 +178,27 @@ public class Player : MonoBehaviour
         }
         if (gameObject.transform.position.x <= cameraBounds.transform.position.x -18)
         {
-            EnterRoom(Vector2.left);
+            cameraManager.EnterRoom(Vector2.left, cameraCenter, cameraBounds.transform.localScale);
             //OnUnBindCamera();
         }
         if (gameObject.transform.position.x >= cameraBounds.transform.position.x +18)
         {
-            EnterRoom(Vector2.right);
+            cameraManager.EnterRoom(Vector2.right, cameraCenter, cameraBounds.transform.localScale);
             //OnUnBindCamera();
         }
         if (gameObject.transform.position.y <= cameraBounds.transform.position.y -10)
         {
-            EnterRoom(Vector2.down);
+            cameraManager.EnterRoom(Vector2.down, cameraCenter, cameraBounds.transform.localScale);
             //OnUnBindCamera();
         }
         if (gameObject.transform.position.y >= cameraBounds.transform.position.y +10)
         {
-            EnterRoom(Vector2.up);
+            cameraManager.EnterRoom(Vector2.up, cameraCenter, cameraBounds.transform.localScale);
             //OnUnBindCamera();
         }
     }
 
-    void EnterRoom(Vector2 roomDirection)
+    /*void EnterRoom(Vector2 roomDirection)
     {
         //temporary solution, later we will get the direct point to the enemies from save file
         Debug.Log("Enter new room");
@@ -206,6 +208,7 @@ public class Player : MonoBehaviour
         {
             //parentObj = GameObject.Find("leftRoom");
             cameraCenter.x = cameraCenter.x -36;
+            //
         }
         if (roomDirection == Vector2.right)
         {
@@ -223,9 +226,7 @@ public class Player : MonoBehaviour
                 tempPosition.x = gameObject.transform.position.x%20;
                 tempPosition.y = gameObject.transform.position.y%10;
                 gameObject.transform.position = tempPosition;
-                //gameObject.transform.position = gameObject.transform.position - new Vector2(20*(gameObject.transform.position.x/20),10*(gameObject.transform.position.y/10));
             }
-            cameraBounds = GameObject.Find("CameraBounds");
         }
         if (roomDirection == Vector2.down)
         {
@@ -248,13 +249,14 @@ public class Player : MonoBehaviour
                 exampleEnemy.SetActive(true);
             }
         }
-    }
+    }*/
 
     public void getCameraBounds ()
     {
         cameraBounds = GameObject.Find("CameraBounds");
+        cameraManager = cameraBounds.GetComponent<CameraManager>();
         cameraCenter = cameraBounds.transform.position;
-        CenterCamera();
+        CenterCamera(cameraCenter, cameraBounds.transform.localScale);
     }
 
 }
