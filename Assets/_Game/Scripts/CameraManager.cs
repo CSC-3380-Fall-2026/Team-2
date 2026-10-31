@@ -1,12 +1,17 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using Unity.Cinemachine;
 
 public class CameraManager : MonoBehaviour
 {
     GameObject playerObj;
     public Player playerScript;
     public SceneData sceneData;
+    [SerializeField] public GameObject cameraBounds;
+    [SerializeField] public Vector2 cameraCenter;
+    public bool isCameraBound = true;
+    [SerializeField] private CinemachineConfiner2D confiner;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -45,22 +50,28 @@ public class CameraManager : MonoBehaviour
 
     private IEnumerator FindPlayer()
     {
-        // Wait until the player exists
-        while (playerObj == null)
-        {
-            playerObj = GameObject.FindWithTag("Player");
-            yield return null;
-        }
-
-        // Wait until we have the player Script
         while (playerScript == null)
         {
-            playerScript = playerObj.GetComponent<Player>();
-            yield return null;
+            playerObj = GameObject.FindWithTag("Player");
+
+            if (playerObj != null)
+            {
+                playerScript = playerObj.GetComponent<Player>();
+            }
+
+            if (playerScript == null)
+            {
+                yield return null;
+            }
         }
 
-        //Get the camera bounds
-        playerScript.getCameraBounds();
+        SetPlayer(playerScript);
+    }
+
+    public void SetPlayer(Player player)
+    {
+        playerScript = player;
+        player.cameraManager = this;
     }
 
     private void ResetLevelVariables()
@@ -69,7 +80,7 @@ public class CameraManager : MonoBehaviour
     }
 
 
-    public void EnterRoom(Vector2 roomDirection, Vector2 cameraCenter, Vector2 cameraBounds)
+    public void EnterRoom(Vector2 roomDirection)
     {
         //SceneData nextRoomData = null;
         //temporary solution, later we will get the direct point to the enemies from save file
@@ -107,6 +118,36 @@ public class CameraManager : MonoBehaviour
         //sceneData = nextRoomData;
         //cameraCenter = sceneData.roomCenter;
         //cameraBounds = sceneData.roomBounds;
-        playerScript.CenterCamera(cameraCenter, cameraBounds);
+        CenterCamera(cameraCenter, cameraBounds.transform.localScale);
+    }
+
+    public void CenterCamera(Vector2 center, Vector2 bounds)
+    {
+        if (cameraBounds == null)
+            return;
+
+        cameraCenter = center;
+
+        cameraBounds.transform.position =
+            new Vector3(center.x, center.y, cameraBounds.transform.position.z);
+
+        cameraBounds.transform.localScale =
+            new Vector3(bounds.x, bounds.y, 1f);
+
+        Physics2D.SyncTransforms();
+
+        if (confiner != null)
+        {
+            confiner.InvalidateBoundingShapeCache();
+        }
+
+        Debug.Log($"Camera center updated: {cameraCenter}");
+    }
+
+    public void ToggleCameraBound()
+    {
+        CenterCamera(cameraCenter, cameraBounds.transform.localScale);
+        isCameraBound = !isCameraBound;
+        Debug.Log(isCameraBound);
     }
 }

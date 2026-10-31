@@ -26,7 +26,7 @@ public class Player : MonoBehaviour
     public float maxCharge = 30f;
     public float spinDecayRate = 2f;
     public float spinDeceleration = 1f;
-    public bool isCameraBound = true;
+    
     public bool isSpinning;
     public bool isLaunching;
     
@@ -36,8 +36,7 @@ public class Player : MonoBehaviour
     public CircleCollider2D playerCollider;
     public GameObject playerObject;
     [SerializeField] private static Player instance;
-    [SerializeField] public GameObject cameraBounds;
-    [SerializeField] public Vector2 cameraCenter;
+    
     [SerializeField] public CameraManager cameraManager;
     
     [Header("Movement Settings")]
@@ -61,7 +60,7 @@ public class Player : MonoBehaviour
             Destroy(playerObject);
         }
         ChangeState(new PlayerIdleState(this));
-        getCameraBounds();
+        //getCameraBounds();
     }
 
     void Update()
@@ -159,111 +158,49 @@ public class Player : MonoBehaviour
 
     void OnUnBindCamera() // for debuggin mostly
     {
-        CenterCamera(cameraCenter, cameraBounds.transform.localScale);
-        isCameraBound = !isCameraBound;
-        Debug.Log(isCameraBound);
-    }
-
-    public void CenterCamera(Vector2 center,Vector2 bounds)
-    {
-            cameraCenter = center;
-            cameraBounds.transform.position = center;
-            Debug.Log(cameraBounds.transform.position);
-            cameraBounds.transform.localScale = bounds;
-            //Debug.Log(cameraBounds.transform.localScale);
+            if (cameraManager != null)
+        {
+            cameraManager.ToggleCameraBound();
+        }
     }
 
     void checkRoom ()
     {
-        if (!isCameraBound)
+        if (cameraManager == null)
+        {return;} //ensures we have everything loaded before checking rooms
+
+        if (!cameraManager.isCameraBound)
         {
-            cameraBounds.transform.position = playerObject.transform.position;
+            cameraManager.cameraBounds.transform.position = playerObject.transform.position;
         }
-        if (gameObject.transform.position.x <= cameraBounds.transform.position.x -18)
+        if (gameObject.transform.position.x <= cameraManager.cameraBounds.transform.position.x -18)
         {
-            cameraManager.EnterRoom(Vector2.left, cameraCenter, cameraBounds.transform.localScale);
-            //OnUnBindCamera();
+            cameraManager.EnterRoom(Vector2.left);
             Debug.Log("Enter left");
         }
-        if (gameObject.transform.position.x >= cameraBounds.transform.position.x +18)
+        else if (gameObject.transform.position.x >= cameraManager.cameraBounds.transform.position.x +18)
         {
-            cameraManager.EnterRoom(Vector2.right, cameraCenter, cameraBounds.transform.localScale);
-            //OnUnBindCamera();
+            cameraManager.EnterRoom(Vector2.right);
             Debug.Log("Enter right");
         }
-        if (gameObject.transform.position.y <= cameraBounds.transform.position.y -10)
+        else if (gameObject.transform.position.y <= cameraManager.cameraBounds.transform.position.y -10)
         {
-            cameraManager.EnterRoom(Vector2.down, cameraCenter, cameraBounds.transform.localScale);
-            //OnUnBindCamera();
+            cameraManager.EnterRoom(Vector2.down);
             Debug.Log("Enter down");
         }
-        if (gameObject.transform.position.y >= cameraBounds.transform.position.y +10)
+        else if (gameObject.transform.position.y >= cameraManager.cameraBounds.transform.position.y +10)
         {
-            cameraManager.EnterRoom(Vector2.up, cameraCenter, cameraBounds.transform.localScale);
-            //OnUnBindCamera();
+            cameraManager.EnterRoom(Vector2.up);
             Debug.Log("Enter up");
         }
     }
 
-    /*void EnterRoom(Vector2 roomDirection)
-    {
-        //temporary solution, later we will get the direct point to the enemies from save file
-        Debug.Log("Enter new room");
-        GameObject parentObj = GameObject.Find("leftRoom");;
-        Scene currentScene = SceneManager.GetActiveScene();
-        if (roomDirection == Vector2.left)
-        {
-            //parentObj = GameObject.Find("leftRoom");
-            cameraCenter.x = cameraCenter.x -36;
-            //
-        }
-        if (roomDirection == Vector2.right)
-        {
-            //parentObj = GameObject.Find("rightRoom");
-            cameraCenter.x = cameraCenter.x + 36;
-        }
-        if (roomDirection == Vector2.up)
-        {
-            //parentObj = GameObject.Find("upRoom");
-            cameraCenter.y = cameraCenter.y + 20;
-            if (currentScene.name == "Game") //the following lines should reside in a statement that checks if the next room is in another scene
-            {   
-                SceneManager.LoadScene("Game 2");
-                Vector2 tempPosition;
-                tempPosition.x = gameObject.transform.position.x%20;
-                tempPosition.y = gameObject.transform.position.y%10;
-                gameObject.transform.position = tempPosition;
-            }
-        }
-        if (roomDirection == Vector2.down)
-        {
-            //parentObj = GameObject.Find("downRoom");
-            if (currentScene.name == "Game 2")
-            {SceneManager.LoadScene("Game");}
-            cameraCenter.y = cameraCenter.y - 20;
-        }
-        CenterCamera();
-
-        if (parentObj != null)
-        {
-            // 2. Search the parent's children (works even if "Secret_Door" is disabled)
-            Transform childTransform = parentObj.transform.Find("example enemy");
-            
-            if (childTransform != null)
-            {
-                GameObject exampleEnemy = childTransform.gameObject;
-                // You can now activate it:
-                exampleEnemy.SetActive(true);
-            }
-        }
-    }*/
-
-    public void getCameraBounds ()
+    /*public void getCameraBounds ()
     {
         cameraBounds = GameObject.Find("CameraBounds");
         cameraManager = cameraBounds.GetComponent<CameraManager>();
         cameraCenter = cameraBounds.transform.position;
         CenterCamera(cameraCenter, cameraBounds.transform.localScale);
-    }
+    }*/
 
 }
