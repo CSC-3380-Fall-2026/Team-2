@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using NUnit.Framework;
 using UnityEngine;
 
 //Death Handler that manages death and properly restoring to previous checkpoints.
@@ -10,24 +12,38 @@ public class deathHandler : MonoBehaviour
 
     private bool isHandlingDeath; //default = false
 
-    //Method checks if death is being handled, true meaning return, false meaning start handling.
-    public void HandleDeath() {
+    //Method checks if death is already being handled & saveDataHandler exist.
+    //If true, then starts handling death loading.
+    public bool handleDeath(Action onFinished = null) {
         if (isHandlingDeath) {
-            return;
+            return false;
         }
+        if (saveDataHandler.instance == null) {
+            Debug.LogError("Cannot handle death as no save data handler exists. deathHandler.cs", this);
+            return false;
+        }
+        
         isHandlingDeath = true;
-        StartCoroutine(LoadAfterDeath());
+        StartCoroutine(loadAfterDeath(onFinished));
+        return true;
     }
 
-    //Method waits for defined delay time (yield), then checks for a saveHandler, before loading file. 
-    private IEnumerator LoadAfterDeath() {
+    //Method that does all the handling, restores the player
+    //to the previous checkpoint after finishing.
+    private IEnumerator loadAfterDeath(Action onFinished) {
         yield return new WaitForSecondsRealtime(deathDelay);
-        if (saveDataHandler.instance == null) {
-            Debug.LogError("Cannot load: no save data handler exists.", this);
-            isHandlingDeath = false;
-            yield break;
+
+        try {
+            if (saveDataHandler.instance == null) {
+                Debug.LogError("Cannot load as no save data handler exists. deathHandler.cs", this);
+            }
+            else {
+                saveDataHandler.instance.loadFile();
+            }
         }
-        saveDataHandler.instance.loadFile();
-        isHandlingDeath = false;
+        finally {
+            isHandlingDeath = false;
+            onFinished?.Invoke();
+        }
     }
 }

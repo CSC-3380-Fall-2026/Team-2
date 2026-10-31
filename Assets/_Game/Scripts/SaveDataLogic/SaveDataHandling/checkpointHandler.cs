@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 //Checkpoint Handler that manages saving data when the player interacts with a checkpoint (via pressing O).
 //Additional implementations like the UI will also eventually be added here.
-public class CheckPointHandler : MonoBehaviour, iSaveData {
+public class checkpointHandler : MonoBehaviour, iSaveData {
     
     //intRange = interaction range for checkpoints (currently 12 tiles).
     //checkpoints = array of checkpoint references.
@@ -63,6 +63,7 @@ public class CheckPointHandler : MonoBehaviour, iSaveData {
 
         //Checkpoint data goes here!
         saveDataHandler.instance.saveFile();
+        Debug.Log("Save Called.");
     }
 
     //Searches for nearest checkpoint in range, via math calculations.
