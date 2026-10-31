@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1761649164596192525}
   - component: {fileID: 6922117146535191185}
   - component: {fileID: 2429009875315260522}
+  - component: {fileID: 6910438200259848138}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -166,6 +167,20 @@ MonoBehaviour:
   deceleration: 0.2
   maxSpeed: 20
   direction: {x: 0, y: 0}
+--- !u!114 &6910438200259848138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4129162694390971665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c05b9436ed19c043be328ec78a75301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckPointHandler
+  intRange: 4
+  checkpoints: []
 --- !u!1 &6052873953550113457
 GameObject:
   m_ObjectHideFlags: 0

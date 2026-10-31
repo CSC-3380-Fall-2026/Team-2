@@ -1,13 +1,14 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 //Checkpoint Handler that manages saving data when the player interacts with a checkpoint (via pressing O).
 //Additional implementations like the UI will also eventually be added here.
 public class CheckPointHandler : MonoBehaviour, iSaveData {
     
-    //intRange = interaction range for checkpoints (currently 3 tiles).
+    //intRange = interaction range for checkpoints (currently 12 tiles).
     //checkpoints = array of checkpoint references.
-    [SerializeField, Min(0f)] private float intRange = 3f;
+    [SerializeField, Min(0f)] private float intRange = 4f;
     [SerializeField] private Transform[] checkpoints = new Transform[0];
 
     //Method verifies if the user has pressed the O key. 
@@ -19,6 +20,34 @@ public class CheckPointHandler : MonoBehaviour, iSaveData {
         }
     }
 
+    //Starts checking for refreshes on scene load.
+    private void OnEnable() {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+        refreshCheckpoints();
+    }
+
+    //Stops checking on destruction.
+    private void OnDisable() {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    //Refreshs checkpoint array on request after scene load.
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
+        refreshCheckpoints();
+    }
+
+    //Clears old array, searches loaded scene for checkpoint objects, loads them into array.
+    private void refreshCheckpoints() {
+        checkpoints = new Transform[0];
+        GameObject checkpoint = GameObject.Find("goldsavebrightshine1_0"); //Change this if checkpoint sprite name changes.
+        if (checkpoint == null) {
+            return;
+        }
+
+        checkpoints = new Transform[] {checkpoint.transform}; 
+        Debug.Log("Checkpoints Refreshed.");
+    }
+
     //Checks for nearest checkpoint, if none is in range or no saveHandler, return, otherwise saves.
     public void InteractWithCheckpoint() {
         Transform checkpoint = FindNearestCheckpoint();
@@ -28,7 +57,7 @@ public class CheckPointHandler : MonoBehaviour, iSaveData {
         }
 
         if (saveDataHandler.instance == null) {
-            Debug.LogError("Cannot save: no SaveHandler exists. checkpointHandler.cs ln31", this);
+            Debug.LogError("Cannot save: no SaveHandler exists. checkpointHandler.cs", this);
             return;
         }
 
