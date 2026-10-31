@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using Unity.Collections.Tests.CoreCLR.TestJobs;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
@@ -43,8 +45,13 @@ public class Player : MonoBehaviour
     [SerializeField] public float acceleration = 0.1f;
     [SerializeField] public float deceleration = 0.2f;
     [SerializeField] public float maxSpeed = 20f;
-    
     public Vector2 direction;
+    //Perk Stuff
+    [Header("Shield Settings")]
+    [SerializeField] public float numOfShield = 0;
+
+    [Header("Skill Points")]
+    [SerializeField] public int skillPoints = 0;
 
     void Start()
     {
@@ -255,6 +262,14 @@ public class Player : MonoBehaviour
         cameraBounds = GameObject.Find("CameraBounds");
         cameraCenter = cameraBounds.transform.position;
         CenterCamera();
+    }
+
+    public void ApplySkills(Skill skill)
+    {
+        numOfShield += skill.shieldEffect;
+        acceleration += skill.accelerationEffect;
+        deceleration += skill.deccelerationEffect;
+        maxSpeed += skill.maxSpeedEffect;
     }
 
 }
