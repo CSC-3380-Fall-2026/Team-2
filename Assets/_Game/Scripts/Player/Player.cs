@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Data.Common;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -43,8 +45,14 @@ public class Player : MonoBehaviour
     [SerializeField] public float acceleration = 0.1f;
     [SerializeField] public float deceleration = 0.2f;
     [SerializeField] public float maxSpeed = 20f;
-    
-    public Vector2 direction;
+
+    [Header("Death Fields")]
+    [SerializeField] private deathHandler playerDeathHandler;
+    public bool isDead{get; private set;}
+    private bool physicsSimmed;
+
+
+    public Vector2 direction; // <-- idk what header this var belongs to. -Anthony
 
     void Start()
     {
@@ -65,12 +73,29 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        //Debug Death Command: CTRL + K
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null && keyboard.ctrlKey.isPressed && keyboard.kKey.wasPressedThisFrame) {
+            death();
+        }
+
+        //MOST IMPORTANT FUNCTION, EVERY ACTION THAT THE PLAYER 
+        //CAN DO MUST HAVE THIS IF STATEMENT AT THE VERY TOP.
+        if (isDead) {
+            return;
+        }
+        
+        
         currentState.Update();
         HandlePhasing();
     }
 
     void FixedUpdate()
     {
+        if (isDead) {
+            return;
+        }
+
         currentState.PhysicsUpdate();
         checkRoom();
     }
@@ -87,11 +112,22 @@ public class Player : MonoBehaviour
 
     void OnMove(InputValue move)
     {
+        if (isDead) {
+            return;
+        }
+
         direction = move.Get<Vector2>();
     }
 
     void OnSpin(InputValue spin)
     {
+        if (isDead) {
+            return;
+        }
+        if (spin.isPressed && Keyboard.current != null && Keyboard.current.ctrlKey.isPressed) {
+            return;
+        }
+
         isSpinning = spin.isPressed;
         if (isSpinning && !(currentState is PlayerSpinState))
         {
@@ -107,6 +143,10 @@ public class Player : MonoBehaviour
 
     void OnShoot(InputValue shoot)
     {
+        if (isDead) {
+            return;
+        }
+
         if (shoot != null)
         {
             isLaunching = true;
@@ -256,5 +296,54 @@ public class Player : MonoBehaviour
         cameraCenter = cameraBounds.transform.position;
         CenterCamera();
     }
+
+    //Checks if player is dead, has a handler, and has a rigidbody. If none are true, player dies,
+    //freezes, and all controls are taken away, until the total respawn time (3 secs) has elapsed.
+    public void death() {
+        if (isDead) { 
+            return;
+        }
+        if (playerDeathHandler == null || !playerDeathHandler.isActiveAndEnabled) {
+            Debug.LogError("Add active deathHandler to the Player prefab. Player.cs", this);
+            return;
+        }
+        if (rb == null) {
+             Debug.LogError("Player missing RigidBody. Player.cs", this);
+             return;
+        }
+        
+        isDead = true;
+        Debug.Log("Debug Kill Called.");
+        direction = Vector2.zero;
+        currentCharge = 0f;
+        ChangeState(new PlayerIdleState(this));
+        isSpinning = false;
+        isLaunching = false;
+        physicsSimmed = rb.simulated;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.simulated = false;
+
+        //Death Amim Starts Here V
+
+        if (!playerDeathHandler.handleDeath(finishDeath)) {
+            finishDeath();
+        }
+    }
+
+    //Restores control to player.
+     private void finishDeath() {
+        //Death Anim Finish Here V
+
+        direction = Vector2.zero;
+        currentCharge = 0f;
+        isSpinning = false;
+        isLaunching = false;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.simulated = physicsSimmed;
+        ChangeState(new PlayerIdleState(this));
+        isDead = false;
+     }
 
 }
