@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     public float maxCharge = 30f;
     public float spinDecayRate = 2f;
     public float spinDeceleration = 1f;
-    public bool isCameraBound = true;
+    
     public bool isSpinning;
     public bool isLaunching;
 
@@ -36,6 +36,10 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public CircleCollider2D playerCollider;
     public GameObject playerObject;
+    [SerializeField] private static Player instance;
+    
+    [SerializeField] public CameraManager cameraManager;
+    
     private static Player instance;
     public GameObject cameraBounds;
     public Vector2 cameraCenter;
@@ -82,7 +86,7 @@ public class Player : MonoBehaviour
     {
 
         ChangeState(new PlayerIdleState(this));
-        getCameraBounds();
+        //getCameraBounds();
     }
 
     void Update()
@@ -219,6 +223,9 @@ public class Player : MonoBehaviour
 
     void OnUnBindCamera() // for debuggin mostly
     {
+            if (cameraManager != null)
+        {
+            cameraManager.ToggleCameraBound();
         CenterCamera();
         isCameraBound = !isCameraBound;
         Debug.Log(isCameraBound);
@@ -257,8 +264,14 @@ public class Player : MonoBehaviour
         }
     }
 
-    void EnterRoom(Vector2 roomDirection)
+    void checkRoom ()
     {
+        if (cameraManager == null)
+        {return;} //ensures we have everything loaded before checking rooms
+
+        if (!cameraManager.isCameraBound)
+        {
+            cameraManager.cameraBounds.transform.position = playerObject.transform.position;
         //temporary solution, later we will get the direct point to the enemies from save file
         Debug.Log("Enter new room");
         GameObject parentObj = GameObject.Find("leftRoom"); ;
@@ -268,13 +281,15 @@ public class Player : MonoBehaviour
             //parentObj = GameObject.Find("leftRoom");
             cameraCenter.x = cameraCenter.x - 36;
         }
-        if (roomDirection == Vector2.right)
+        if (gameObject.transform.position.x <= cameraManager.cameraBounds.transform.position.x -18)
         {
-            //parentObj = GameObject.Find("rightRoom");
-            cameraCenter.x = cameraCenter.x + 36;
+            cameraManager.EnterRoom(Vector2.left);
+            Debug.Log("Enter left");
         }
-        if (roomDirection == Vector2.up)
+        else if (gameObject.transform.position.x >= cameraManager.cameraBounds.transform.position.x +18)
         {
+            cameraManager.EnterRoom(Vector2.right);
+            Debug.Log("Enter right");
             //parentObj = GameObject.Find("upRoom");
             cameraCenter.y = cameraCenter.y + 20;
             if (currentScene.name == "Game") //the following lines should reside in a statement that checks if the next room is in another scene
@@ -288,17 +303,23 @@ public class Player : MonoBehaviour
             }
             cameraBounds = GameObject.Find("CameraBounds");
         }
-        if (roomDirection == Vector2.down)
+        else if (gameObject.transform.position.y <= cameraManager.cameraBounds.transform.position.y -10)
         {
+            cameraManager.EnterRoom(Vector2.down);
+            Debug.Log("Enter down");
             //parentObj = GameObject.Find("downRoom");
             if (currentScene.name == "Game 2")
             { SceneManager.LoadScene("Game"); }
             cameraCenter.y = cameraCenter.y - 20;
         }
-        CenterCamera();
-
-        if (parentObj != null)
+        else if (gameObject.transform.position.y >= cameraManager.cameraBounds.transform.position.y +10)
         {
+            cameraManager.EnterRoom(Vector2.up);
+            Debug.Log("Enter up");
+        }
+    }
+
+    /*public void getCameraBounds ()
             // 2. Search the parent's children (works even if "Secret_Door" is disabled)
             Transform childTransform = parentObj.transform.Find("example enemy");
 
@@ -314,9 +335,10 @@ public class Player : MonoBehaviour
     public void getCameraBounds()
     {
         cameraBounds = GameObject.Find("CameraBounds");
+        cameraManager = cameraBounds.GetComponent<CameraManager>();
         cameraCenter = cameraBounds.transform.position;
-        CenterCamera();
-    }
+        CenterCamera(cameraCenter, cameraBounds.transform.localScale);
+    }*/
 
     public void ApplySkills(Skill skill)
     {

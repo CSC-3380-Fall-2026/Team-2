@@ -10,15 +10,15 @@ using System.Collections.Generic;
 [System.Serializable]
 public class SceneData {
     //public int placeholder; <- Create var like this.
-    public List<Vector2> roomCenters = new List<Vector2>();
-    public List<Vector2> roomBounds = new List<Vector2>();
+    public Vector2 roomCenter;
+    public Vector2 roomBounds;
     public bool isPuzzleSolved = false;
-    public string nextScene = null; //leave null unless the next room should load another scene
+    public string currentScene = null; //when moving to the next room, check if the Scene is the same
     
-    public SceneData leftRoom;
-    public SceneData rightRoom;
-    public SceneData upRoom;
-    public SceneData downRoom;
+    [SerializeReference] public SceneData leftRoom;
+    [SerializeReference] public SceneData rightRoom;
+    [SerializeReference] public SceneData upRoom;
+    [SerializeReference] public SceneData downRoom;
     
     public List<bool> isEnemyAliveList = new List<bool>();
     public List<bool> isEnemyAbleRespawnList = new List<bool>(); 
