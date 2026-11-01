@@ -1,27 +1,23 @@
-using System;
 using System.Collections;
-using Unity.Collections.Tests.CoreCLR.TestJobs;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Interactions;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
     public PlayerState currentState;
     private Coroutine speedResetCoroutine;
-    
+
     [Header("Phase Settings")]
     public float phaseThreshold = 15f;
     public LayerMask phaseLayers;
-    
+
     [Header("Bounce Settings")]
     public PhysicsMaterial2D bounceMaterial;
     public float bounceSpeedMultiplier = 2f;
     public float bounceSpeedDuration = 1f;
     public float maxBounceSpeed = 60f;
-    
+
     [Header("Spin Settings")]
     public float currentCharge;
     public float chargePerMash = 4f;
@@ -31,7 +27,7 @@ public class Player : MonoBehaviour
     public bool isCameraBound = true;
     public bool isSpinning;
     public bool isLaunching;
-    
+
 
     [Header("Components")]
     public Rigidbody2D rb;
@@ -40,32 +36,39 @@ public class Player : MonoBehaviour
     private static Player instance;
     public GameObject cameraBounds;
     public Vector2 cameraCenter;
-    
+
     [Header("Movement Settings")]
     [SerializeField] public float acceleration = 0.1f;
     [SerializeField] public float deceleration = 0.2f;
-    [SerializeField] public float maxSpeed = 20f;
+    [SerializeField] public float baseMaxSpeed = 20f;
+
+    private float skillMaxSpeedBonus = 0f;
+    private float bounceMaxSpeedBonus = 0f;
+
+    public float maxSpeed => baseMaxSpeed + skillMaxSpeedBonus + bounceMaxSpeedBonus;
     public Vector2 direction;
     //Perk Stuff
     [Header("Shield Settings")]
     [SerializeField] public float numOfShield = 0;
 
     [Header("Skill Points")]
-    [SerializeField] public int skillPoints = 0;
+    [SerializeField] public int skillPoints = 5;
 
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(playerObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(playerObject);
+        gameObject.tag = "Player";
+    }
     void Start()
     {
-        if(instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(playerObject);
-            gameObject.tag = "Player";
-        }
-        else 
-        {
-            Debug.Log($"Destroyed Clone");
-            Destroy(playerObject);
-        }
+
         ChangeState(new PlayerIdleState(this));
         getCameraBounds();
     }
@@ -137,7 +140,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-    
+
     //For the Player Bounce, The player must collide with a surface that has the same bounce material
     void OnCollisionEnter2D(Collision2D bounce)
     {
@@ -146,7 +149,12 @@ public class Player : MonoBehaviour
             return;
         }
 
-        maxSpeed = Mathf.Min(bounce.relativeVelocity.magnitude * bounceSpeedMultiplier, maxBounceSpeed);
+        float bounceSpeed = Mathf.Min(
+            bounce.relativeVelocity.magnitude * bounceSpeedMultiplier,
+            maxBounceSpeed
+        );
+
+        bounceMaxSpeedBonus = Mathf.Max(0f, bounceSpeed - (baseMaxSpeed + skillMaxSpeedBonus));
 
         if (speedResetCoroutine != null)
         {
@@ -155,11 +163,13 @@ public class Player : MonoBehaviour
 
         speedResetCoroutine = StartCoroutine(ResetMaxSpeed());
     }
-    
+
     IEnumerator ResetMaxSpeed()
     {
         yield return new WaitForSeconds(bounceSpeedDuration);
-        maxSpeed = 20f;
+
+        bounceMaxSpeedBonus = 0f;
+        speedResetCoroutine = null;
     }
 
 
@@ -172,31 +182,31 @@ public class Player : MonoBehaviour
 
     void CenterCamera()
     {
-            cameraBounds.transform.position = cameraCenter;
+        cameraBounds.transform.position = cameraCenter;
     }
 
-    void checkRoom ()
+    void checkRoom()
     {
         if (!isCameraBound)
         {
             cameraBounds.transform.position = playerObject.transform.position;
         }
-        if (gameObject.transform.position.x <= cameraBounds.transform.position.x -18)
+        if (gameObject.transform.position.x <= cameraBounds.transform.position.x - 18)
         {
             EnterRoom(Vector2.left);
             //OnUnBindCamera();
         }
-        if (gameObject.transform.position.x >= cameraBounds.transform.position.x +18)
+        if (gameObject.transform.position.x >= cameraBounds.transform.position.x + 18)
         {
             EnterRoom(Vector2.right);
             //OnUnBindCamera();
         }
-        if (gameObject.transform.position.y <= cameraBounds.transform.position.y -10)
+        if (gameObject.transform.position.y <= cameraBounds.transform.position.y - 10)
         {
             EnterRoom(Vector2.down);
             //OnUnBindCamera();
         }
-        if (gameObject.transform.position.y >= cameraBounds.transform.position.y +10)
+        if (gameObject.transform.position.y >= cameraBounds.transform.position.y + 10)
         {
             EnterRoom(Vector2.up);
             //OnUnBindCamera();
@@ -207,12 +217,12 @@ public class Player : MonoBehaviour
     {
         //temporary solution, later we will get the direct point to the enemies from save file
         Debug.Log("Enter new room");
-        GameObject parentObj = GameObject.Find("leftRoom");;
+        GameObject parentObj = GameObject.Find("leftRoom"); ;
         Scene currentScene = SceneManager.GetActiveScene();
         if (roomDirection == Vector2.left)
         {
             //parentObj = GameObject.Find("leftRoom");
-            cameraCenter.x = cameraCenter.x -36;
+            cameraCenter.x = cameraCenter.x - 36;
         }
         if (roomDirection == Vector2.right)
         {
@@ -224,11 +234,11 @@ public class Player : MonoBehaviour
             //parentObj = GameObject.Find("upRoom");
             cameraCenter.y = cameraCenter.y + 20;
             if (currentScene.name == "Game") //the following lines should reside in a statement that checks if the next room is in another scene
-            {   
+            {
                 SceneManager.LoadScene("Game 2");
                 Vector2 tempPosition;
-                tempPosition.x = gameObject.transform.position.x%20;
-                tempPosition.y = gameObject.transform.position.y%10;
+                tempPosition.x = gameObject.transform.position.x % 20;
+                tempPosition.y = gameObject.transform.position.y % 10;
                 gameObject.transform.position = tempPosition;
                 //gameObject.transform.position = gameObject.transform.position - new Vector2(20*(gameObject.transform.position.x/20),10*(gameObject.transform.position.y/10));
             }
@@ -238,7 +248,7 @@ public class Player : MonoBehaviour
         {
             //parentObj = GameObject.Find("downRoom");
             if (currentScene.name == "Game 2")
-            {SceneManager.LoadScene("Game");}
+            { SceneManager.LoadScene("Game"); }
             cameraCenter.y = cameraCenter.y - 20;
         }
         CenterCamera();
@@ -247,7 +257,7 @@ public class Player : MonoBehaviour
         {
             // 2. Search the parent's children (works even if "Secret_Door" is disabled)
             Transform childTransform = parentObj.transform.Find("example enemy");
-            
+
             if (childTransform != null)
             {
                 GameObject exampleEnemy = childTransform.gameObject;
@@ -257,7 +267,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void getCameraBounds ()
+    public void getCameraBounds()
     {
         cameraBounds = GameObject.Find("CameraBounds");
         cameraCenter = cameraBounds.transform.position;
@@ -269,7 +279,6 @@ public class Player : MonoBehaviour
         numOfShield += skill.shieldEffect;
         acceleration += skill.accelerationEffect;
         deceleration += skill.deccelerationEffect;
-        maxSpeed += skill.maxSpeedEffect;
+        skillMaxSpeedBonus += skill.maxSpeedEffect;
     }
-
 }
