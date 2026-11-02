@@ -58,13 +58,15 @@ public class SkillTree : MonoBehaviour
 
         if (skill.isUnlocked) { return; }
 
+        if (player == null)
+        {
+            Debug.LogError("Player refrence not found");
+            return;
+        }
+
         if (player.skillPoints >= skill.skillCost)
         {
-            if (player == null)
-            {
-                Debug.LogError("Player refrence not found");
-                return;
-            }
+
             player.skillPoints -= skill.skillCost;
             skill.isUnlocked = true;
             ApplySkills(skill);
@@ -120,7 +122,7 @@ public class SkillTree : MonoBehaviour
         }
     }
 
-        public void ApplySkills(Skill skill)
+    public void ApplySkills(Skill skill)
     {
         player.numOfShield += skill.shieldEffect;
         player.acceleration += skill.accelerationEffect;
