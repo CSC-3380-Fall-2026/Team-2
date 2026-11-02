@@ -117,21 +117,7 @@ public class SkillTree : MonoBehaviour
     {
         skills.Add(new Skill
         {
-            skillName = "TestSKill1",
-            skillDesc = "test skill",
-            skillCost = 1,
-            maxSpeedEffect = 100f,
-            shieldEffect = 1
 
-        });
-
-        skills.Add(new Skill
-        {
-            skillName = "TestSkill2",
-            skillDesc = "ts2",
-            skillCost = 2,
-            deccelerationEffect = 20f,
-            accelerationEffect = 15f
 
         });
     }
