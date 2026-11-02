@@ -67,7 +67,7 @@ public class SkillTree : MonoBehaviour
             }
             player.skillPoints -= skill.skillCost;
             skill.isUnlocked = true;
-            player.ApplySkills(skill);
+            ApplySkills(skill);
             Debug.Log("Unlocked Skill: " + skill.skillName);
             Debug.Log("Remainging SKill Points: " + player.skillPoints);
             return;
@@ -118,5 +118,13 @@ public class SkillTree : MonoBehaviour
             player.skillPoints += 1;
             Debug.Log("SkillPoints: " + player.skillPoints);
         }
+    }
+
+        public void ApplySkills(Skill skill)
+    {
+        player.numOfShield += skill.shieldEffect;
+        player.acceleration += skill.accelerationEffect;
+        player.deceleration += skill.deccelerationEffect;
+        player.skillMaxSpeedBonus += skill.maxSpeedEffect;
     }
 }

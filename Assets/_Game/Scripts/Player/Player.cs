@@ -42,7 +42,7 @@ public class Player : MonoBehaviour
     [SerializeField] public float deceleration = 0.2f;
     [SerializeField] public float baseMaxSpeed = 20f;
 
-    private float skillMaxSpeedBonus = 0f;
+    public float skillMaxSpeedBonus = 0f;
     private float bounceMaxSpeedBonus = 0f;
 
     public float maxSpeed => baseMaxSpeed + skillMaxSpeedBonus + bounceMaxSpeedBonus;
@@ -52,7 +52,7 @@ public class Player : MonoBehaviour
     [SerializeField] public float numOfShield = 0;
 
     [Header("Skill Points")]
-    [SerializeField] public int skillPoints = 5;
+    [SerializeField] public int skillPoints = 0;
 
     void Awake()
     {
@@ -274,11 +274,5 @@ public class Player : MonoBehaviour
         CenterCamera();
     }
 
-    public void ApplySkills(Skill skill)
-    {
-        numOfShield += skill.shieldEffect;
-        acceleration += skill.accelerationEffect;
-        deceleration += skill.deccelerationEffect;
-        skillMaxSpeedBonus += skill.maxSpeedEffect;
-    }
+
 }
