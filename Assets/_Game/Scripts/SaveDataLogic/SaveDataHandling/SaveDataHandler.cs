@@ -14,6 +14,7 @@ public class saveDataHandler : MonoBehaviour {
 //From SaveData.cs Script
 private SaveData saveData;
 private List<iSaveData> SaveDataObjects;
+private SceneData sceneData;
 
 //Creates a new instance of the saveFileHandler class, which is used to load and save data to a file.
 private saveFileHandler saveHandler;
@@ -93,22 +94,22 @@ private saveFileHandler saveHandler;
     }
 
     //Debug method for saving and loading data manually pre-checkpoints.
-    //O = Save, L = Load
+    //MUST BE HOLDING CTRL, O = Save, L = Load
     private void Update() {
         if (instance != this) {
             return;
         }
 
         Keyboard keyboard = Keyboard.current;
-        if (keyboard == null) {
+        if (keyboard == null || !keyboard.ctrlKey.isPressed) {
             return;
         }
         if (keyboard.oKey.wasPressedThisFrame) {
-            Debug.Log("O key pressed: Saved Game");
+            Debug.Log("Debug Save Called.");
             saveFile();
         }
         else if (keyboard.lKey.wasPressedThisFrame) {
-            Debug.Log("L key pressed: Loaded Save");
+            Debug.Log("Debug Load Called.");
             loadFile();
         }
     }

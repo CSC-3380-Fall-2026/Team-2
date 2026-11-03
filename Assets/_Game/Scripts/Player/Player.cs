@@ -1,8 +1,10 @@
-using System;
 using System.Collections;
+using System.Data.Common;
+using NUnit.Framework;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -41,7 +43,7 @@ public class Player : MonoBehaviour
     public float maxCharge = 30f;
     public float spinDecayRate = 2f;
     public float spinDeceleration = 1f;
-    public bool isCameraBound = true;
+    
     public bool isSpinning;
     public bool isLaunching;
 
@@ -50,6 +52,10 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public CircleCollider2D playerCollider;
     public GameObject playerObject;
+    [SerializeField] private static Player instance;
+    
+    [SerializeField] public CameraManager cameraManager;
+    
     public GameObject cameraBounds;
     public Vector2 cameraCenter;
 
@@ -58,12 +64,43 @@ public class Player : MonoBehaviour
     [SerializeField] public float deceleration = 0.2f;
     [SerializeField] public float maxSpeed = 20f;
 
-    public Vector2 direction;
+    [SerializeField] public float baseMaxSpeed = 20f;
 
+    private float skillMaxSpeedBonus = 0f;
+    private float bounceMaxSpeedBonus = 0f;
+
+    public float maxSpeed => baseMaxSpeed + skillMaxSpeedBonus + bounceMaxSpeedBonus;
+    public Vector2 direction;
+    //Perk Stuff
+    [Header("Shield Settings")]
+    [SerializeField] public float numOfShield = 0;
+    //[SerializeField] public float maxSpeed = 20f;
+
+    [Header("Death Fields")]
+    [SerializeField] private deathHandler playerDeathHandler;
+    public bool isDead{get; private set;}
+    private bool physicsSimmed;
+
+    [Header("Skill Points")]
+    [SerializeField] public int skillPoints = 5;
+
+    void Awake()
+    {
+        if (instance != null && instance != this)
+        {
+            Destroy(playerObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(playerObject);
+        gameObject.tag = "Player";
+    }
     void Start()
     {
+
         ChangeState(new PlayerIdleState(this));
-        cameraCenter = cameraBounds.transform.position;
+        //getCameraBounds();
     }
 
     void Update()
@@ -78,6 +115,10 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (isDead) {
+            return;
+        }
+
         currentState.PhysicsUpdate();
         checkRoom();
     }
@@ -130,11 +171,22 @@ public class Player : MonoBehaviour
 
     void OnMove(InputValue move)
     {
+        if (isDead) {
+            return;
+        }
+
         direction = move.Get<Vector2>();
     }
 
     void OnSpin(InputValue spin)
     {
+        if (isDead) {
+            return;
+        }
+        if (spin.isPressed && Keyboard.current != null && Keyboard.current.ctrlKey.isPressed) {
+            return;
+        }
+
         isSpinning = spin.isPressed;
         if (isSpinning && !(currentState is PlayerSpinState))
         {
@@ -150,6 +202,10 @@ public class Player : MonoBehaviour
 
     void OnShoot(InputValue shoot)
     {
+        if (isDead) {
+            return;
+        }
+
         if (shoot != null)
         {
             isLaunching = true;
@@ -189,6 +245,12 @@ public class Player : MonoBehaviour
         }
 
         maxSpeed = Mathf.Min(collision.relativeVelocity.magnitude * bounceSpeedMultiplier, maxBounceSpeed);
+        float bounceSpeed = Mathf.Min(
+            bounce.relativeVelocity.magnitude * bounceSpeedMultiplier,
+            maxBounceSpeed
+        );
+
+        bounceMaxSpeedBonus = Mathf.Max(0f, bounceSpeed - (baseMaxSpeed + skillMaxSpeedBonus));
 
         if (speedResetCoroutine != null)
         {
@@ -206,75 +268,78 @@ public class Player : MonoBehaviour
     IEnumerator ResetMaxSpeed()
     {
         yield return new WaitForSeconds(bounceSpeedDuration);
-        maxSpeed = 20f;
+
+        bounceMaxSpeedBonus = 0f;
+        speedResetCoroutine = null;
     }
 
 
     void OnUnBindCamera() // for debuggin mostly
     {
-        CenterCamera();
-        isCameraBound = !isCameraBound;
-        Debug.Log(isCameraBound);
-    }
-
-    void CenterCamera()
-    {
-        cameraBounds.transform.position = cameraCenter;
+        if (cameraManager != null)
+        {
+            cameraManager.ToggleCameraBound();
+        }
     }
 
     void checkRoom()
     {
-        if (!isCameraBound)
-        {
-            cameraBounds.transform.position = playerObject.transform.position;
-        }
         if (gameObject.transform.position.x <= cameraBounds.transform.position.x - 18)
         {
-            EnterRoom(Vector2.left);
+            cameraManager.EnterRoom(Vector2.left);
             //OnUnBindCamera();
         }
         if (gameObject.transform.position.x >= cameraBounds.transform.position.x + 18)
         {
-            EnterRoom(Vector2.right);
+            cameraManager.EnterRoom(Vector2.right);
             //OnUnBindCamera();
         }
         if (gameObject.transform.position.y <= cameraBounds.transform.position.y - 10)
         {
-            EnterRoom(Vector2.down);
+            cameraManager.EnterRoom(Vector2.down);
             //OnUnBindCamera();
         }
         if (gameObject.transform.position.y >= cameraBounds.transform.position.y + 10)
         {
-            EnterRoom(Vector2.up);
+            cameraManager.EnterRoom(Vector2.up);
             //OnUnBindCamera();
         }
     }
 
-    void EnterRoom(Vector2 roomDirection)
+    public void ApplySkills(Skill skill)
     {
-        //temporary solution, later we will get the direct point to the enemies from save file
-        GameObject parentObj = GameObject.Find("leftRoom"); ;
-        if (roomDirection == Vector2.left)
-        {
-            //parentObj = GameObject.Find("leftRoom");
-            cameraCenter.x = cameraCenter.x - 36;
+        numOfShield += skill.shieldEffect;
+        acceleration += skill.accelerationEffect;
+        deceleration += skill.deccelerationEffect;
+        skillMaxSpeedBonus += skill.maxSpeedEffect;
+    }
+    //Checks if player is dead, has a handler, and has a rigidbody. If none are true, player dies,
+    //freezes, and all controls are taken away, until the total respawn time (3 secs) has elapsed.
+    public void death() 
+    {
+        if (isDead) { 
+            return;
         }
-        if (roomDirection == Vector2.right)
-        {
-            //parentObj = GameObject.Find("rightRoom");
-            cameraCenter.x = cameraCenter.x + 36;
+        if (playerDeathHandler == null || !playerDeathHandler.isActiveAndEnabled) {
+            Debug.LogError("Add active deathHandler to the Player prefab. Player.cs", this);
+            return;
         }
-        if (roomDirection == Vector2.up)
-        {
-            //parentObj = GameObject.Find("upRoom");
-            cameraCenter.y = cameraCenter.y + 20;
+        if (rb == null) {
+             Debug.LogError("Player missing RigidBody. Player.cs", this);
+             return;
         }
-        if (roomDirection == Vector2.down)
-        {
-            //parentObj = GameObject.Find("downRoom");
-            cameraCenter.y = cameraCenter.y - 20;
-        }
-        CenterCamera();
+        
+        isDead = true;
+        Debug.Log("Debug Kill Called.");
+        direction = Vector2.zero;
+        currentCharge = 0f;
+        ChangeState(new PlayerIdleState(this));
+        isSpinning = false;
+        isLaunching = false;
+        physicsSimmed = rb.simulated;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.simulated = false;
 
         if (parentObj != null)
         {
@@ -357,6 +422,28 @@ public class Player : MonoBehaviour
         animator.Play(stateHash, 0, 0f);
 
         return true;
+        //Death Amim Starts Here V
+
+        if (!playerDeathHandler.handleDeath(finishDeath)) 
+        {
+            finishDeath();
+        }
+    }
+
+    //Restores control to player.
+    private void finishDeath() 
+    {
+        //Death Anim Finish Here V
+
+        direction = Vector2.zero;
+        currentCharge = 0f;
+        isSpinning = false;
+        isLaunching = false;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        rb.simulated = physicsSimmed;
+        ChangeState(new PlayerIdleState(this));
+        isDead = false;
     }
 
 }
