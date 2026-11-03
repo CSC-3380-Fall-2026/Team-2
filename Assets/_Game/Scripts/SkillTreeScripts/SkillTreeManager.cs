@@ -20,7 +20,7 @@ public class SkillTree : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
         player = FindAnyObjectByType<Player>();
-        addSkills();
+        AddSkills();
 
 
     }
@@ -32,7 +32,7 @@ public class SkillTree : MonoBehaviour
         //index checl
         if (index < 0 || index >= skills.Count)
         {
-            Debug.Log("Invalid Inxex");
+            Debug.Log("Invalid Index");
             return;
         }
 
@@ -77,6 +77,12 @@ public class SkillTree : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         player = FindAnyObjectByType<Player>();
+
+        if (player == null)
+        {
+            return;
+        }
+
     }
 
 
@@ -84,6 +90,11 @@ public class SkillTree : MonoBehaviour
     //PerkDebugging
     private void Update()
     {
+        if (player == null || Keyboard.current == null)
+        {
+            return;
+        }
+
         if (Keyboard.current != null &&
             Keyboard.current.digit1Key.wasPressedThisFrame)
         {
@@ -94,6 +105,16 @@ public class SkillTree : MonoBehaviour
         Keyboard.current.digit2Key.wasPressedThisFrame)
         {
             UnlockSkill(1);
+        }
+        if (Keyboard.current != null &&
+        Keyboard.current.digit3Key.wasPressedThisFrame)
+        {
+            UnlockSkill(2);
+        }
+        if (Keyboard.current != null &&
+        Keyboard.current.digit4Key.wasPressedThisFrame)
+        {
+            UnlockSkill(3);
         }
 
         if (Keyboard.current != null &&
@@ -106,6 +127,12 @@ public class SkillTree : MonoBehaviour
 
     public void ApplySkills(Skill skill)
     {
+        if (player == null)
+        {
+            Debug.LogError("player not found");
+            return;
+        }
+
         player.numOfShield += skill.shieldEffect;
         player.acceleration += skill.accelerationEffect;
         player.deceleration += skill.deccelerationEffect;
@@ -113,12 +140,37 @@ public class SkillTree : MonoBehaviour
     }
 
 
-    private void addSkills()
+    private void AddSkills()
     {
         skills.Add(new Skill
         {
-
+            skillName = "Top Speed 1",
+            skillCost = 1,
+            maxSpeedEffect = 5
 
         });
+
+        skills.Add(new Skill
+        {
+            skillName = "Control 1",
+            skillCost = 1,
+            deccelerationEffect = 5
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Acceleration 1",
+            skillCost = 1,
+            accelerationEffect = 5
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Shield 1",
+            skillCost = 1,
+            accelerationEffect = -5,
+            shieldEffect = 1
+        });
+        Debug.Log("Total Skills Added: " + skills.Count);
     }
 }
