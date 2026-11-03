@@ -40,7 +40,6 @@ public class Player : MonoBehaviour
     
     [SerializeField] public CameraManager cameraManager;
     
-    private static Player instance;
     public GameObject cameraBounds;
     public Vector2 cameraCenter;
 
@@ -57,15 +56,12 @@ public class Player : MonoBehaviour
     //Perk Stuff
     [Header("Shield Settings")]
     [SerializeField] public float numOfShield = 0;
-    [SerializeField] public float maxSpeed = 20f;
+    //[SerializeField] public float maxSpeed = 20f;
 
     [Header("Death Fields")]
     [SerializeField] private deathHandler playerDeathHandler;
     public bool isDead{get; private set;}
     private bool physicsSimmed;
-
-
-    public Vector2 direction; // <-- idk what header this var belongs to. -Anthony
 
     [Header("Skill Points")]
     [SerializeField] public int skillPoints = 5;
@@ -223,122 +219,35 @@ public class Player : MonoBehaviour
 
     void OnUnBindCamera() // for debuggin mostly
     {
-            if (cameraManager != null)
+        if (cameraManager != null)
         {
             cameraManager.ToggleCameraBound();
-        CenterCamera();
-        isCameraBound = !isCameraBound;
-        Debug.Log(isCameraBound);
-    }
-
-    void CenterCamera()
-    {
-        cameraBounds.transform.position = cameraCenter;
+        }
     }
 
     void checkRoom()
     {
-        if (!isCameraBound)
-        {
-            cameraBounds.transform.position = playerObject.transform.position;
-        }
         if (gameObject.transform.position.x <= cameraBounds.transform.position.x - 18)
         {
-            EnterRoom(Vector2.left);
+            cameraManager.EnterRoom(Vector2.left);
             //OnUnBindCamera();
         }
         if (gameObject.transform.position.x >= cameraBounds.transform.position.x + 18)
         {
-            EnterRoom(Vector2.right);
+            cameraManager.EnterRoom(Vector2.right);
             //OnUnBindCamera();
         }
         if (gameObject.transform.position.y <= cameraBounds.transform.position.y - 10)
         {
-            EnterRoom(Vector2.down);
+            cameraManager.EnterRoom(Vector2.down);
             //OnUnBindCamera();
         }
         if (gameObject.transform.position.y >= cameraBounds.transform.position.y + 10)
         {
-            EnterRoom(Vector2.up);
+            cameraManager.EnterRoom(Vector2.up);
             //OnUnBindCamera();
         }
     }
-
-    void checkRoom ()
-    {
-        if (cameraManager == null)
-        {return;} //ensures we have everything loaded before checking rooms
-
-        if (!cameraManager.isCameraBound)
-        {
-            cameraManager.cameraBounds.transform.position = playerObject.transform.position;
-        //temporary solution, later we will get the direct point to the enemies from save file
-        Debug.Log("Enter new room");
-        GameObject parentObj = GameObject.Find("leftRoom"); ;
-        Scene currentScene = SceneManager.GetActiveScene();
-        if (roomDirection == Vector2.left)
-        {
-            //parentObj = GameObject.Find("leftRoom");
-            cameraCenter.x = cameraCenter.x - 36;
-        }
-        if (gameObject.transform.position.x <= cameraManager.cameraBounds.transform.position.x -18)
-        {
-            cameraManager.EnterRoom(Vector2.left);
-            Debug.Log("Enter left");
-        }
-        else if (gameObject.transform.position.x >= cameraManager.cameraBounds.transform.position.x +18)
-        {
-            cameraManager.EnterRoom(Vector2.right);
-            Debug.Log("Enter right");
-            //parentObj = GameObject.Find("upRoom");
-            cameraCenter.y = cameraCenter.y + 20;
-            if (currentScene.name == "Game") //the following lines should reside in a statement that checks if the next room is in another scene
-            {
-                SceneManager.LoadScene("Game 2");
-                Vector2 tempPosition;
-                tempPosition.x = gameObject.transform.position.x % 20;
-                tempPosition.y = gameObject.transform.position.y % 10;
-                gameObject.transform.position = tempPosition;
-                //gameObject.transform.position = gameObject.transform.position - new Vector2(20*(gameObject.transform.position.x/20),10*(gameObject.transform.position.y/10));
-            }
-            cameraBounds = GameObject.Find("CameraBounds");
-        }
-        else if (gameObject.transform.position.y <= cameraManager.cameraBounds.transform.position.y -10)
-        {
-            cameraManager.EnterRoom(Vector2.down);
-            Debug.Log("Enter down");
-            //parentObj = GameObject.Find("downRoom");
-            if (currentScene.name == "Game 2")
-            { SceneManager.LoadScene("Game"); }
-            cameraCenter.y = cameraCenter.y - 20;
-        }
-        else if (gameObject.transform.position.y >= cameraManager.cameraBounds.transform.position.y +10)
-        {
-            cameraManager.EnterRoom(Vector2.up);
-            Debug.Log("Enter up");
-        }
-    }
-
-    /*public void getCameraBounds ()
-            // 2. Search the parent's children (works even if "Secret_Door" is disabled)
-            Transform childTransform = parentObj.transform.Find("example enemy");
-
-            if (childTransform != null)
-            {
-                GameObject exampleEnemy = childTransform.gameObject;
-                // You can now activate it:
-                exampleEnemy.SetActive(true);
-            }
-        }
-    }
-
-    public void getCameraBounds()
-    {
-        cameraBounds = GameObject.Find("CameraBounds");
-        cameraManager = cameraBounds.GetComponent<CameraManager>();
-        cameraCenter = cameraBounds.transform.position;
-        CenterCamera(cameraCenter, cameraBounds.transform.localScale);
-    }*/
 
     public void ApplySkills(Skill skill)
     {
@@ -349,7 +258,8 @@ public class Player : MonoBehaviour
     }
     //Checks if player is dead, has a handler, and has a rigidbody. If none are true, player dies,
     //freezes, and all controls are taken away, until the total respawn time (3 secs) has elapsed.
-    public void death() {
+    public void death() 
+    {
         if (isDead) { 
             return;
         }
@@ -376,13 +286,15 @@ public class Player : MonoBehaviour
 
         //Death Amim Starts Here V
 
-        if (!playerDeathHandler.handleDeath(finishDeath)) {
+        if (!playerDeathHandler.handleDeath(finishDeath)) 
+        {
             finishDeath();
         }
     }
 
     //Restores control to player.
-     private void finishDeath() {
+    private void finishDeath() 
+    {
         //Death Anim Finish Here V
 
         direction = Vector2.zero;
@@ -394,6 +306,6 @@ public class Player : MonoBehaviour
         rb.simulated = physicsSimmed;
         ChangeState(new PlayerIdleState(this));
         isDead = false;
-     }
+    }
 
 }
