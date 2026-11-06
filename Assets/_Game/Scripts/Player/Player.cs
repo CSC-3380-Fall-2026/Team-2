@@ -78,6 +78,8 @@ public class Player : MonoBehaviour
 
     [Header("Death Fields")]
     [SerializeField] private deathHandler playerDeathHandler;
+    [SerializeField] private LayerMask deathLayerMask;
+    [SerializeField] private LayerMask floorLayerMask;
     public bool isDead{get; private set;}
     private bool physicsSimmed;
 
@@ -105,6 +107,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        
+        //If player is not touching the floor, the player should die
+        if (playerCollider.IsTouchingLayers(deathLayerMask) && !playerCollider.IsTouchingLayers(floorLayerMask)) {
+            Death();
+        }
 
         currentState.Update();
 
@@ -315,8 +322,10 @@ public class Player : MonoBehaviour
     }
     //Checks if player is dead, has a handler, and has a rigidbody. If none are true, player dies,
     //freezes, and all controls are taken away, until the total respawn time (3 secs) has elapsed.
-    public void death() 
+    public void Death() 
     {
+        
+        
         if (isDead) { 
             return;
         }
