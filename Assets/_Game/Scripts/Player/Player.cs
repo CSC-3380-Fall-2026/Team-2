@@ -9,23 +9,7 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour
 {
     public PlayerState currentState;
-    public Animator animator;
     private Coroutine speedResetCoroutine;
-
-    [Header("Animations")]
-    public AnimationClip bounce;
-    public AnimationClip TakeDamage;
-
-    public string bounceName = "Bounce";
-    public string damageName = "TakeDamage";
-
-    public float hurtCoolDown = 1f;
-
-    private float bounceDur;
-    private float invisFrame;
-
-    private bool playBounce;
-    private bool playTakeDamage;
 
     [Header("Phase Settings")]
     public float phaseThreshold = 15f;
@@ -62,8 +46,6 @@ public class Player : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] public float acceleration = 0.1f;
     [SerializeField] public float deceleration = 0.2f;
-    [SerializeField] public float maxSpeed = 20f;
-
     [SerializeField] public float baseMaxSpeed = 20f;
 
     private float skillMaxSpeedBonus = 0f;
@@ -105,11 +87,20 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        //Debug Death Command: CTRL + K
+        Keyboard keyboard = Keyboard.current;
+        if (keyboard != null && keyboard.ctrlKey.isPressed && keyboard.kKey.wasPressedThisFrame) {
+            death();
+        }
 
+        //MOST IMPORTANT FUNCTION, EVERY ACTION THAT THE PLAYER 
+        //CAN DO MUST HAVE THIS IF STATEMENT AT THE VERY TOP.
+        if (isDead) {
+            return;
+        }
+        
+        
         currentState.Update();
-
-        UpdateRollAnimation();
-
         HandlePhasing();
     }
 
@@ -131,42 +122,6 @@ public class Player : MonoBehaviour
         }
         currentState = newState;
         currentState.Enter();
-    }
-
-    //
-    void UpdateRollAnimation()
-    {
-        if (playBounce)
-        {
-            //let bounce play before roll starts again 
-            if (Time.time < bounceDur)
-                return;
-
-            playBounce = false;
-            playTakeDamage = false;
-            animator.Play("Ratroll", 0, 0f);
-
-        }
-        Vector2 velocity = rb.linearVelocity;
-        float speed = velocity.magnitude;
-
-        //playback sceen to actaul movement speed              
-        animator.speed = Mathf.Clamp(rb.linearVelocity.magnitude / 10f, 0f, 3f);
-
-        if (speed < 0.05f)
-            return;
-
-        Vector2 travelDirection = velocity.normalized;
-
-        bool diagonal = Mathf.Abs(travelDirection.x) > 0.38f && Mathf.Abs(travelDirection.y) > 0.38f;
-
-        string animationName = diagonal ? "RatRollDiagonal" : "Ratroll";
-
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName(animationName))
-        {
-            animator.Play(animationName, 0, 0f);
-        }
-
     }
 
     void OnMove(InputValue move)
@@ -231,20 +186,13 @@ public class Player : MonoBehaviour
     }
 
     //For the Player Bounce, The player must collide with a surface that has the same bounce material
-    void OnCollisionEnter2D(Collision2D collision)
+    void OnCollisionEnter2D(Collision2D bounce)
     {
-        //priority for enemy collision over wall
-        if (isEnemy(collision.collider))
-        {
-            TryPlayTakeDamage();
-            return;
-        }
-        if (collision.collider.sharedMaterial != bounceMaterial)
+        if (bounce.collider.sharedMaterial != bounceMaterial)
         {
             return;
         }
 
-        maxSpeed = Mathf.Min(collision.relativeVelocity.magnitude * bounceSpeedMultiplier, maxBounceSpeed);
         float bounceSpeed = Mathf.Min(
             bounce.relativeVelocity.magnitude * bounceSpeedMultiplier,
             maxBounceSpeed
@@ -258,11 +206,6 @@ public class Player : MonoBehaviour
         }
 
         speedResetCoroutine = StartCoroutine(ResetMaxSpeed());
-
-        if (!playTakeDamage)
-        {
-            playResponse(bounceName, bounce , false);
-         }
     }
 
     IEnumerator ResetMaxSpeed()
@@ -341,87 +284,6 @@ public class Player : MonoBehaviour
         rb.angularVelocity = 0f;
         rb.simulated = false;
 
-        if (parentObj != null)
-        {
-            // 2. Search the parent's children (works even if "Secret_Door" is disabled)
-            Transform childTransform = parentObj.transform.Find("example enemy");
-
-            if (childTransform != null)
-            {
-                GameObject exampleEnemy = childTransform.gameObject;
-                // You can now activate it:
-                exampleEnemy.SetActive(true);
-            }
-
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D other)
-    {
-        if (isEnemy(other))
-        {
-            TryPlayTakeDamage();
-        }
-    }
-
-
-    bool isEnemy(Collider2D other)
-    {
-        //starts collider on child of enemy
-        Transform target = other.transform;
-
-        while (target != null)
-        {
-            if (target.CompareTag("Enemy"))
-            {
-                return true;
-            }
-
-            target = target.parent;
-
-        }
-        return false;
-
-    }
-    void TryPlayTakeDamage()
-    {
-        if (Time.time < invisFrame)
-        {
-        return;
-        }
-
-        if (playResponse(damageName,TakeDamage , true))
-
-        {
-            invisFrame = Time.time + Mathf.Max(hurtCoolDown, TakeDamage.length);
-        }
-    }
-
-    bool playResponse(string stateName, AnimationClip clip, bool isHurt)
-    {
-
-        if (animator == null || clip == null)
-        {
-            //console warning 
-            Debug.LogWarning("Assingn animator and Animation clips", this);
-            return false;
-        }
-        int stateHash = Animator.StringToHash("Base Layer." + stateName);
-
-        if (!animator.HasState(0, stateHash))
-        {
-            Debug.LogWarning("Animator sate not " + stateName, this);
-                return false;
-        }
-
-        playBounce = true;
-        playTakeDamage = isHurt;
-        bounceDur = Time.time + clip.length;
-
-        animator.speed = 1f;
-        animator.Play(stateHash, 0, 0f);
-
-        return true;
         //Death Amim Starts Here V
 
         if (!playerDeathHandler.handleDeath(finishDeath)) 
