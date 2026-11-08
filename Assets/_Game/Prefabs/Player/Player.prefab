@@ -156,27 +156,19 @@ MonoBehaviour:
   maxCharge: 30
   spinDecayRate: 2
   spinDeceleration: 1
+  isCameraBound: 1
   isSpinning: 0
   isLaunching: 0
   rb: {fileID: 1761649164596192525}
   playerCollider: {fileID: 2234825524222482557}
   playerObject: {fileID: 4129162694390971665}
-  cameraManager: {fileID: 0}
   cameraBounds: {fileID: 0}
   cameraCenter: {x: 0, y: 0}
   acceleration: 0.5
   deceleration: 0.2
-  baseMaxSpeed: 20
-  direction: {x: 0, y: 0}
-  numOfShield: 0
+  maxSpeed: 20
   playerDeathHandler: {fileID: -4397832600137239767}
-  deathLayerMask:
-    serializedVersion: 2
-    m_Bits: 128
-  floorLayerMask:
-    serializedVersion: 2
-    m_Bits: 64
-  skillPoints: 5
+  direction: {x: 0, y: 0}
 --- !u!114 &6910438200259848138
 MonoBehaviour:
   m_ObjectHideFlags: 0
