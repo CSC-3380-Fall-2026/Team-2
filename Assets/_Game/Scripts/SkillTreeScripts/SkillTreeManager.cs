@@ -165,7 +165,9 @@ public class SkillTree : MonoBehaviour
          skillName = "Shield Two",
          skillBranch = 0,
          skillCost = 1,
-         shieldEffect = 1
+         shieldEffect = 1,
+         maxSpeedEffect = 200,
+         accelerationEffect = 90
         });
 
         skills.Add(new Skill
