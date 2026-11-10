@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
     [Header("Movement Settings")]
     [SerializeField] public float acceleration = 0.1f;
     [SerializeField] public float deceleration = 0.2f;
-    [SerializeField] public float maxSpeed = 20f;
+ //   [SerializeField] public float maxSpeed = 20f;
 
     [SerializeField] public float baseMaxSpeed = 20f;
 
@@ -110,7 +110,7 @@ public class Player : MonoBehaviour
         
         //If player is not touching the floor, the player should die
         if (playerCollider.IsTouchingLayers(deathLayerMask) && !playerCollider.IsTouchingLayers(floorLayerMask)) {
-            Death();
+           // Death();
         }
 
         currentState.Update();
@@ -236,7 +236,7 @@ public class Player : MonoBehaviour
             }
         }
     }
-
+/*
     //For the Player Bounce, The player must collide with a surface that has the same bounce material
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -271,7 +271,7 @@ public class Player : MonoBehaviour
             playResponse(bounceName, bounce , false);
          }
     }
-
+*/
     IEnumerator ResetMaxSpeed()
     {
         yield return new WaitForSeconds(bounceSpeedDuration);
@@ -315,6 +315,7 @@ public class Player : MonoBehaviour
 
     //Checks if player is dead, has a handler, and has a rigidbody. If none are true, player dies,
     //freezes, and all controls are taken away, until the total respawn time (3 secs) has elapsed.
+/*
     public void Death() 
     {
         
@@ -357,7 +358,7 @@ public class Player : MonoBehaviour
 
         }
     }
-
+*/
     void OnTriggerEnter2D(Collider2D other)
     {
         if (isEnemy(other))
