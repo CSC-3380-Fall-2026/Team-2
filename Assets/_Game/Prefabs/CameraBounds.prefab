@@ -92,3 +92,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraManager
   playerScript: {fileID: 0}
+  sceneData:
+    roomID: 
+    isPuzzleSolved: 0
+    isEnemyAliveList: 
+    isEnemyAbleRespawnList: 
+    enemyLocationList: []
+    enemyNameList: []
+  roomData: {fileID: 0}
+  cameraBounds: {fileID: 7625893720212126129}
+  cameraCenter: {x: 0, y: 0}
+  isCameraBound: 1
+  confiner: {fileID: 0}
