@@ -144,10 +144,10 @@ public class SkillTree : MonoBehaviour
             return;
         }
 
-        player.numOfShield += skill.shieldEffect;
+        //player.numOfShield += skill.shieldEffect;
         player.acceleration += skill.accelerationEffect;
-        player.deceleration += skill.deccelerationEffect;
-        player.skillMaxSpeedBonus += skill.maxSpeedEffect;
+        //player.deceleration += skill.deccelerationEffect;
+        //player.skillMaxSpeedBonus += skill.maxSpeedEffect;
     }
 
 /*
@@ -166,7 +166,7 @@ public class SkillTree : MonoBehaviour
          skillCost = 1,
          shieldEffect = 1,
          maxSpeedEffect = -player.maxSpeed * 0.5f,
-         accelerationEffect = -player.acceleration * 0.325f
+         accelerationEffect = -player.acceleration * 0.35f
         });
 
         skills.Add(new Skill
@@ -176,15 +176,16 @@ public class SkillTree : MonoBehaviour
          skillCost = 1,
          shieldEffect = 1,
          accelerationEffect = -player.acceleration * 0.325f,
-         deccelerationEffect = player.deceleration * 0.25f
+         deccelerationEffect = player.deceleration * 0.45f
         });
 
         skills.Add(new Skill
         {
-         skillName = "Shield Three",
-         skillBranch = 0,
+         skillName = "Shield 3",
+         skillBranch = 1,
          skillCost = 1,
-         shieldEffect = 1
+         shieldEffect = 1,
+         accelerationEffect = -player.acceleration * 0.10f
         });
 
         skills.Add(new Skill
