@@ -123,8 +123,16 @@ public class SkillTree : MonoBehaviour
         {
             player.skillPoints += 1;
             Debug.Log("SkillPoints: " + player.skillPoints);
+        }
 
+        if (Keyboard.current != null &&
+        Keyboard.current.digit9Key.wasPressedThisFrame)
+        {
             Debug.Log("Max Speed: " + player.maxSpeed);
+            Debug.Log( "Acceleration: "+ player.acceleration );
+            Debug.Log( "Decceleration: " + player.deceleration );
+            Debug.Log( "Num Shield: " + player.numOfShield);
+            
         }
     }
 
@@ -153,19 +161,22 @@ public class SkillTree : MonoBehaviour
     {
         skills.Add(new Skill
         {
-         skillName = "Shield One",
+         skillName = "Shield 1",
          skillBranch = 0,
          skillCost = 1,
          shieldEffect = 1,
-         maxSpeedEffect = -10,
+         maxSpeedEffect = -player.maxSpeed * 0.5f,
+         accelerationEffect = -player.acceleration * 0.325f
         });
 
         skills.Add(new Skill
         {
-         skillName = "Shield Two",
+         skillName = "Shield 2",
          skillBranch = 0,
          skillCost = 1,
-         shieldEffect = 1
+         shieldEffect = 1,
+         accelerationEffect = -player.acceleration * 0.325f,
+         deccelerationEffect = player.deceleration * 0.25f
         });
 
         skills.Add(new Skill
@@ -183,5 +194,4 @@ public class SkillTree : MonoBehaviour
         Debug.Log("Total Skills Added: " + skills.Count);
     }
 
-  
 }
