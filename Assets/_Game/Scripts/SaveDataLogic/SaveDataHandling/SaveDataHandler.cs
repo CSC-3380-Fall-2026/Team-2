@@ -10,6 +10,7 @@ using System.Text.RegularExpressions;
 public class saveDataHandler : MonoBehaviour {
 
 [SerializeField] private string saveName;
+[SerializeField] private DefaultSaveData defaultSaveData;   
 
 //From SaveData.cs Script
 private SaveData saveData;
@@ -21,18 +22,29 @@ private saveFileHandler saveHandler;
     public static saveDataHandler instance { get; private set; }
     
     //Initializes the save manager, checks for duplicates to destroy.
-    private void Awake() {
-        if (instance != null && instance != this) {
-            Debug.LogError("Multiple saveDataHandler instances found! SavaDataHandler.cs ln19");
+    private void Awake()
+    {
+        if (instance != null && instance != this)
+        {
             Destroy(gameObject);
             return;
         }
-        
+
         instance = this;
         DontDestroyOnLoad(gameObject);
-        this.saveHandler = new saveFileHandler(Application.persistentDataPath, saveName);
-        saveData = saveHandler.Load() ?? new SaveData();
-    } 
+
+        saveHandler = new saveFileHandler(
+            Application.persistentDataPath,
+            saveName
+        );
+
+        saveData = saveHandler.Load();
+
+        if (saveData == null)
+        {
+            newSave();
+        }
+    }
     
     //Listens for scene loads, to properly manage save manager.
     private void OnEnable() {
@@ -71,15 +83,31 @@ private saveFileHandler saveHandler;
     }
 
     //Calls for the creation of a new save file.
-    public void newSave() {
-        this.saveData = new SaveData();
+    public void newSave()
+    {
+        saveData = new SaveData();
+
+        if (defaultSaveData != null)
+        {
+            saveData.sceneData = JsonUtility.FromJson<SceneData>(
+                JsonUtility.ToJson(defaultSaveData.sceneData)
+            );
+        }
     }
 
     //Calls for the save file to be loaded. if one doesn't exist, it will call "newSave()" to make a file.
-    public void loadFile() {
-        saveData = saveHandler.Load() ?? new SaveData();
+    public void loadFile()
+    {
+        saveData = saveHandler.Load();
+
+        if (saveData == null)
+        {
+            newSave();
+        }
+
         applySceneData();
     }
+    
 
     //Saves the data to the save file.
     public void saveFile() {
@@ -116,7 +144,8 @@ private saveFileHandler saveHandler;
 
     //Debug method which clears the savefile after the killing the game.
     //DELETE THIS SHIT AFTER WE GET FURTHER ALONG IN DEV.
-    private void saveDebugClear() {
+    private void saveDebugClear() 
+    {
 
     }
 

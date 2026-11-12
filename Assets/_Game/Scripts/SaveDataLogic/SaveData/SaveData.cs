@@ -10,6 +10,10 @@ using System.Collections.Generic;
 [System.Serializable]
 public class SaveData {
     //public int placeholder; <- Create var like this. 
+    public string currentRoomId;
+
+    public List<SceneData> rooms = new List<SceneData>();
+
     public SceneData sceneData;
     public SaveData() {
         //this.placeholder = 0; <- Assign default here.
