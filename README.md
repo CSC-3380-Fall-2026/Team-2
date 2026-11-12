@@ -9,7 +9,7 @@ Quality Assurance Tester: Malcolm Jones (@MalcolmJ-Cyber)
 
 # About Our Software
 
-Rattom Phaser is a top-down, puzzle-based, rogue-like game. You play as a fat rat named Nathaniel inside the "Quantum World" after he was shrunk down from a science experiment. The objective is to clear maps by completing puzzles, defeating enemies, and slaying the map's boss, by taking advantage of the player's movement and "atom phasing" abilities. This program was made on Unity with C#.
+Rattom Phaser ™ is a top-down, puzzle-based, rogue-like game. You play as a fat rat named Nathaniel inside the "Quantum World" after he was shrunk down from a science experiment. The objective is to clear maps by completing puzzles, defeating enemies, and slaying the map's boss, by taking advantage of the player's movement and "atom phasing" abilities. This program was made on Unity with C#.
 
 ## Platforms Tested on [TBA]
 - Windows
