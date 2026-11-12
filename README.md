@@ -1,20 +1,19 @@
 # Rattom Phaser ™ : Team #2
 # Members
-Project Manager: Zavier Lamotte (Zaevir)\
-Communications Lead: Cole Salinas ([GitHub Name])\
-Git Master: Ulisess Munoz ([GitHub Name])\
-Design Lead: Ben Bertoni ([GitHub Name])\
+Project Manager: Zavier Lamotte (@Zaevir)\
+Communications Lead: Cole Salinas (@ThickHamm)\
+Git Master: Ulisess Munoz (@ulisesst2)\
+Design Lead: Ben Bertoni (@gizmo-rat)\
 Quality Assurance Tester: Anthony Meiers (@bobbbbbbbbbbbbbbbbbbbbbbbb)\
 Quality Assurance Tester: Malcolm Jones (@MalcolmJ-Cyber)
 
 # About Our Software
 
-Atom Phaser (Place Holder Name) is a top-down, puzzle-based, rogue-like game. You play as a fat rat named Nathaniel inside the "quantum world". The objective is to clear maps by completing puzzles, defeating enemies, and slaying the map's boss. This program was made on Unity and ported into a website to be played.
+Rattom Phaser is a top-down, puzzle-based, rogue-like game. You play as a fat rat named Nathaniel inside the "Quantum World" after he was shrunk down from a science experiment. The objective is to clear maps by completing puzzles, defeating enemies, and slaying the map's boss, by taking advantage of the player's movement and "atom phasing" abilities. This program was made on Unity with C#.
 
-## Platforms Tested on (TBA)
-- Android
-- iOS
+## Platforms Tested on [TBA]
 - Windows
+- macOS
 
 # Important Links
 Kanban Board: [link] <= Jira Link Goes Here \
