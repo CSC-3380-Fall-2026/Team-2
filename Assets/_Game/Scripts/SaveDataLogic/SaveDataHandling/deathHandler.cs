@@ -38,7 +38,7 @@ public class deathHandler : MonoBehaviour
                 Debug.LogError("Cannot load as no save data handler exists. deathHandler.cs", this);
             }
             else {
-                saveDataHandler.instance.loadFile();
+                yield return saveDataHandler.instance.loadFileRoutine();
             }
         }
         finally {
