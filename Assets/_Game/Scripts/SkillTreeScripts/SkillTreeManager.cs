@@ -99,23 +99,18 @@ public class SkillTree : MonoBehaviour
         if (Keyboard.current != null &&
             Keyboard.current.digit1Key.wasPressedThisFrame)
         {
-            UnlockSkill(0);
+            UnlockSkill(6);
         }
 
         if (Keyboard.current != null &&
         Keyboard.current.digit2Key.wasPressedThisFrame)
         {
-            UnlockSkill(1);
+            UnlockSkill(7);
         }
         if (Keyboard.current != null &&
         Keyboard.current.digit3Key.wasPressedThisFrame)
         {
-            UnlockSkill(2);
-        }
-        if (Keyboard.current != null &&
-        Keyboard.current.digit4Key.wasPressedThisFrame)
-        {
-            UnlockSkill(3);
+            UnlockSkill(8);
         }
 
         if (Keyboard.current != null &&
@@ -129,10 +124,10 @@ public class SkillTree : MonoBehaviour
         Keyboard.current.digit9Key.wasPressedThisFrame)
         {
             Debug.Log("Max Speed: " + player.maxSpeed);
-            Debug.Log( "Acceleration: "+ player.acceleration );
-            Debug.Log( "Decceleration: " + player.deceleration );
-            Debug.Log( "Num Shield: " + player.numOfShield);
-            
+            Debug.Log("Acceleration: " + player.acceleration);
+            Debug.Log("deceleration: " + player.deceleration);
+            Debug.Log("Num Shield: " + player.numOfShield);
+
         }
     }
 
@@ -144,53 +139,99 @@ public class SkillTree : MonoBehaviour
             return;
         }
 
-        //player.numOfShield += skill.shieldEffect;
+        player.numOfShield += skill.shieldEffect;
         player.acceleration += skill.accelerationEffect;
-        //player.deceleration += skill.deccelerationEffect;
-        //player.skillMaxSpeedBonus += skill.maxSpeedEffect;
+        player.deceleration += skill.decelerationEffect;
+        player.skillMaxSpeedBonus += skill.maxSpeedEffect;
     }
 
-/*
-    [SerializeField] public float acceleration = 0.1f;
-    [SerializeField] public float deceleration = 0.2f;
-    [SerializeField] public float baseMaxSpeed = 20f;
+    /*
+        [SerializeField] public float acceleration = 0.1f;
+        [SerializeField] public float deceleration = 0.2f;
+        [SerializeField] public float baseMaxSpeed = 20f;
 
-*/
+    */
 
     private void AddSkills()
     {
         skills.Add(new Skill
         {
-         skillName = "Shield 1",
-         skillBranch = 0,
-         skillCost = 1,
-         shieldEffect = 1,
-         maxSpeedEffect = -player.maxSpeed * 0.5f,
-         accelerationEffect = -player.acceleration * 0.35f
+            skillName = "Shield 1",
+            skillBranch = 1,
+            skillCost = 1,
+            shieldEffect = 1,
+            maxSpeedEffect = -player.maxSpeed * 0.5f,
+            accelerationEffect = -player.acceleration * 0.35f
         });
 
         skills.Add(new Skill
         {
-         skillName = "Shield 2",
-         skillBranch = 0,
-         skillCost = 1,
-         shieldEffect = 1,
-         accelerationEffect = -player.acceleration * 0.325f,
-         deccelerationEffect = player.deceleration * 0.45f
+            skillName = "Shield 2",
+            skillBranch = 1,
+            skillCost = 1,
+            shieldEffect = 1,
+            accelerationEffect = -player.acceleration * 0.325f,
+            decelerationEffect = player.deceleration * 0.45f
         });
 
         skills.Add(new Skill
         {
-         skillName = "Shield 3",
-         skillBranch = 1,
-         skillCost = 1,
-         shieldEffect = 1,
-         accelerationEffect = -player.acceleration * 0.10f
+            skillName = "Shield 3",
+            skillBranch = 1,
+            skillCost = 1,
+            shieldEffect = 1,
+            accelerationEffect = -player.acceleration * 0.10f
         });
 
         skills.Add(new Skill
         {
+            skillName = "Speed 1",
+            skillBranch = 2,
+            skillCost = 1,
+            accelerationEffect = player.acceleration * 0.10f
+        });
 
+        skills.Add(new Skill
+        {
+            skillName = "Speed 2",
+            skillBranch = 2,
+            skillCost = 1,
+            maxSpeedEffect = player.maxSpeed * 0.5f,
+            decelerationEffect = -player.deceleration * 0.25f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Speed 3",
+            skillBranch = 2,
+            skillCost = 1,
+            maxSpeedEffect = player.maxSpeed * 0.5f,
+            accelerationEffect = player.acceleration * 0.5f,
+            decelerationEffect = -player.deceleration * 0.25f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Control 1",
+            skillBranch = 3,
+            skillCost = 1,
+            decelerationEffect = player.deceleration * 0.35f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Control 2",
+            skillBranch = 3,
+            skillCost = 1,
+            decelerationEffect = player.deceleration * 0.35f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Control 3",
+            skillBranch = 3,
+            skillCost = 1,
+            decelerationEffect = player.deceleration * 0.35f
         });
         Debug.Log("Total Skills Added: " + skills.Count);
     }

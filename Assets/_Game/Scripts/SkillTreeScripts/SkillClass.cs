@@ -17,6 +17,6 @@ public class Skill
     public float maxSpeedEffect;
     public float shieldEffect;
     public float accelerationEffect;
-    public float deccelerationEffect;
+    public float decelerationEffect;
 
 }
