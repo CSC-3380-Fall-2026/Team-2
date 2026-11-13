@@ -17,8 +17,8 @@ MonoBehaviour:
   roomCenter: {x: 0, y: 0}
   roomBounds: {x: 38, y: 20}
   leftRoom: {fileID: 0}
-  rightRoom: {fileID: 0}
-  upRoom: {fileID: 11400000, guid: 90b3c4bc855f6a44bb76e90905b641de, type: 2}
+  rightRoom: {fileID: 11400000, guid: 90b3c4bc855f6a44bb76e90905b641de, type: 2}
+  upRoom: {fileID: 0}
   downRoom: {fileID: 0}
   isPuzzleSolved: 0
   isEnemyAliveList: 

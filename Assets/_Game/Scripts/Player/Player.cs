@@ -60,6 +60,8 @@ public class Player : MonoBehaviour
 
     [Header("Death Fields")]
     [SerializeField] private deathHandler playerDeathHandler;
+    [SerializeField] private LayerMask deathLayerMask;
+    [SerializeField] private LayerMask floorLayerMask;
     public bool isDead{get; private set;}
     private bool physicsSimmed;
     private bool controlsBlocked => isDead || (saveDataHandler.instance != null && saveDataHandler.instance.isLoading);
@@ -89,10 +91,10 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        //Debug Death Command: CTRL + K
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard != null && keyboard.ctrlKey.isPressed && keyboard.kKey.wasPressedThisFrame) {
-            death();
+        
+        //If player is not touching the floor, the player should die
+        if (playerCollider.IsTouchingLayers(deathLayerMask) && !playerCollider.IsTouchingLayers(floorLayerMask)) {
+            Death();
         }
 
         //MOST IMPORTANT FUNCTION, EVERY ACTION THAT THE PLAYER 
@@ -260,7 +262,7 @@ public class Player : MonoBehaviour
     }
     //Checks if player is dead, has a handler, and has a rigidbody. If none are true, player dies,
     //freezes, and all controls are taken away, until the total respawn time (3 secs) has elapsed.
-    public void death() 
+    public void Death() 
     {
         if (controlsBlocked) { 
             return;

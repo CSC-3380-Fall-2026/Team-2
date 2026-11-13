@@ -125,10 +125,14 @@ public class CameraManager : MonoBehaviour
         if (roomData.currentScene!=nextRoomData.currentScene)
         {
             //SceneManager.LoadScene("Game2");
-            playerScript.gameObject.transform.position = new Vector3(playerScript.gameObject.transform.position.x - cameraCenter.x, playerScript.gameObject.transform.position.y - cameraCenter.y, playerScript.gameObject.transform.position.z);
+            //playerScript.gameObject.transform.position = new Vector3(playerScript.gameObject.transform.position.x - cameraCenter.x, playerScript.gameObject.transform.position.y - cameraCenter.y, playerScript.gameObject.transform.position.z);
+            Vector3 changedPosition = new Vector3(roomDirection.x*(roomData.roomBounds.x/2-3)*-1,roomDirection.y*(roomData.roomBounds.y/2-3)*-1,0);
+            playerScript.gameObject.transform.position = changedPosition;
+
             //playerScript.gameObject.transform.position.y = playerScript.gameObject.transform.position.y - roomData.roomCenter.y
             SceneManager.LoadScene(nextRoomData.currentScene);
         }
+        
 
         roomData = nextRoomData;
 
