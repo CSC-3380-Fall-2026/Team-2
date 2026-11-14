@@ -35,6 +35,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Maze 2 (Room Grid).unity
     guid: 901ff9d460b74558ae22b06470a8a1b3
+  - enabled: 1
+    path: Assets/Scenes/Maze 4.unity
+    guid: dd16278d82d0c584a88d88f5ea91e5c8
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}

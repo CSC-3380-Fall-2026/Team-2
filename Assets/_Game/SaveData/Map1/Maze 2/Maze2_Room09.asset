@@ -10,16 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bb77a415363d77548bb833a97bd3f33b, type: 3}
-  m_Name: Map1Room4
+  m_Name: Maze2_Room09
   m_EditorClassIdentifier: Assembly-CSharp::RoomData
-  roomID: 
-  currentScene: Maze 4
-  roomCenter: {x: 0, y: 0}
-  roomBounds: {x: 38, y: 20}
-  leftRoom: {fileID: 0}
+  roomID: Maze2_Room09
+  currentScene: Maze 2 (Room Grid)
+  roomCenter: {x: 108, y: 0}
+  roomBounds: {x: 36, y: 20}
+  leftRoom: {fileID: 11400000, guid: 9a83c1783ed33b34dba1aa5a7ef9a462, type: 2}
   rightRoom: {fileID: 0}
   upRoom: {fileID: 0}
-  downRoom: {fileID: 0}
+  downRoom: {fileID: 11400000, guid: 366478a220200a04287b6cc6ece38257, type: 2}
   isPuzzleSolved: 0
   isEnemyAliveList: 
   isEnemyAbleRespawnList: 

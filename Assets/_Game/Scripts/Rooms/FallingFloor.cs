@@ -14,6 +14,17 @@ public class FallingFloor : MonoBehaviour
 
     void Update()
     {
+        //Arriving from another scene destroys this scene's own Player, so switch to the one that survived
+        if (player == null)
+        {
+            GameObject livePlayer = GameObject.FindWithTag("Player");
+            if (livePlayer == null)
+            {
+                return;
+            }
+            player = livePlayer.transform;
+        }
+
         Vector3Int cell = tilemap.WorldToCell(player.position);
 
         // TODO: if there's no tile at this cell, stop here
