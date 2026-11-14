@@ -19,7 +19,7 @@ MonoBehaviour:
   leftRoom: {fileID: 0}
   rightRoom: {fileID: 11400000, guid: cbf245d9d573fe044a78c20033200335, type: 2}
   upRoom: {fileID: 0}
-  downRoom: {fileID: 11400000, guid: 90b3c4bc855f6a44bb76e90905b641de, type: 2}
+  downRoom: {fileID: 0}
   isPuzzleSolved: 0
   isEnemyAliveList: 
   isEnemyAbleRespawnList: 

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Map1Room4
   m_EditorClassIdentifier: Assembly-CSharp::RoomData
   roomID: 
-  currentScene: Maze 3
-  roomCenter: {x: 38, y: 0}
+  currentScene: Maze 4
+  roomCenter: {x: 0, y: 0}
   roomBounds: {x: 38, y: 20}
   leftRoom: {fileID: 0}
   rightRoom: {fileID: 0}
