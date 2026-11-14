@@ -1,8 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
-using Unity.VisualScripting;
 
 
 public class SkillTree : MonoBehaviour
@@ -87,50 +85,6 @@ public class SkillTree : MonoBehaviour
     }
 
 
-
-    //PerkDebugging
-    private void Update()
-    {
-        if (player == null || Keyboard.current == null)
-        {
-            return;
-        }
-
-        if (Keyboard.current != null &&
-            Keyboard.current.digit1Key.wasPressedThisFrame)
-        {
-            UnlockSkill(6);
-        }
-
-        if (Keyboard.current != null &&
-        Keyboard.current.digit2Key.wasPressedThisFrame)
-        {
-            UnlockSkill(7);
-        }
-        if (Keyboard.current != null &&
-        Keyboard.current.digit3Key.wasPressedThisFrame)
-        {
-            UnlockSkill(8);
-        }
-
-        if (Keyboard.current != null &&
-        Keyboard.current.digit0Key.wasPressedThisFrame)
-        {
-            player.skillPoints += 1;
-            Debug.Log("SkillPoints: " + player.skillPoints);
-        }
-
-        if (Keyboard.current != null &&
-        Keyboard.current.digit9Key.wasPressedThisFrame)
-        {
-            Debug.Log("Max Speed: " + player.maxSpeed);
-            Debug.Log("Acceleration: " + player.acceleration);
-            Debug.Log("deceleration: " + player.deceleration);
-            Debug.Log("Num Shield: " + player.numOfShield);
-
-        }
-    }
-
     public void ApplySkills(Skill skill)
     {
         if (player == null)
@@ -145,12 +99,6 @@ public class SkillTree : MonoBehaviour
         player.skillMaxSpeedBonus += skill.maxSpeedEffect;
     }
 
-    /*
-        [SerializeField] public float acceleration = 0.1f;
-        [SerializeField] public float deceleration = 0.2f;
-        [SerializeField] public float baseMaxSpeed = 20f;
-
-    */
 
     private void AddSkills()
     {
@@ -233,7 +181,6 @@ public class SkillTree : MonoBehaviour
             skillCost = 1,
             decelerationEffect = player.deceleration * 0.35f
         });
-        Debug.Log("Total Skills Added: " + skills.Count);
     }
 
 }
