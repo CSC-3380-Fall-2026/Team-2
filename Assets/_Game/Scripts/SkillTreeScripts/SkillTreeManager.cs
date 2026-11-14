@@ -1,13 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using UnityEngine.InputSystem;
+using TMPro;
+using Unity.VisualScripting;
 
 
 public class SkillTree : MonoBehaviour
 {
     public Player player;
     public List<Skill> skills = new List<Skill>();
+
+    public TMP_Text skillPointsText;
 
     private static SkillTree instance;
     private void Awake()
@@ -20,29 +23,18 @@ public class SkillTree : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
         player = FindAnyObjectByType<Player>();
-
-        skills.Add(new Skill
-        {
-            skillName = "TestSKill1",
-            skillDesc = "test skill",
-            skillCost = 1,
-            maxSpeedEffect = 100f,
-            shieldEffect = 1
-
-        });
-
-        skills.Add(new Skill
-        {
-            skillName = "TestSkill2",
-            skillDesc = "ts2",
-            skillCost = 2,
-            deccelerationEffect = 20f,
-            accelerationEffect = 15f
-
-        });
+        AddSkills();
+        UpdateSkillPointsUI();
 
     }
 
+    public void UpdateSkillPointsUI()
+    {
+        if (player != null && skillPointsText != null)
+        {
+            skillPointsText.text = "Skill Points: " + player.skillPoints;
+        }
+    }
     public void UnlockSkill(int index)
     {
 
@@ -50,7 +42,7 @@ public class SkillTree : MonoBehaviour
         //index checl
         if (index < 0 || index >= skills.Count)
         {
-            Debug.Log("Invalid Inxex");
+            Debug.Log("Invalid Index");
             return;
         }
 
@@ -58,16 +50,19 @@ public class SkillTree : MonoBehaviour
 
         if (skill.isUnlocked) { return; }
 
+        if (player == null)
+        {
+            Debug.LogError("Player refrence not found");
+            return;
+        }
+
         if (player.skillPoints >= skill.skillCost)
         {
-            if (player == null)
-            {
-                Debug.LogError("Player refrence not found");
-                return;
-            }
+
             player.skillPoints -= skill.skillCost;
             skill.isUnlocked = true;
-            player.ApplySkills(skill);
+            ApplySkills(skill);
+            UpdateSkillPointsUI();
             Debug.Log("Unlocked Skill: " + skill.skillName);
             Debug.Log("Remainging SKill Points: " + player.skillPoints);
             return;
@@ -93,30 +88,111 @@ public class SkillTree : MonoBehaviour
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         player = FindAnyObjectByType<Player>();
+
+        if (player == null)
+        {
+            return;
+        }
+
     }
 
 
-
-    //PerkDebugging
-    private void Update()
+    public void ApplySkills(Skill skill)
     {
-        if (Keyboard.current != null &&
-            Keyboard.current.digit1Key.wasPressedThisFrame)
+        if (player == null)
         {
-            UnlockSkill(0);
+            Debug.LogError("player not found");
+            return;
         }
 
-        if (Keyboard.current != null &&
-        Keyboard.current.digit2Key.wasPressedThisFrame)
-        {
-            UnlockSkill(1);
-        }
-
-        if (Keyboard.current != null &&
-        Keyboard.current.digit0Key.wasPressedThisFrame)
-        {
-            player.skillPoints += 1;
-            Debug.Log("SkillPoints: " + player.skillPoints);
-        }
+        player.numOfShield += skill.shieldEffect;
+        player.acceleration += skill.accelerationEffect;
+        player.deceleration += skill.decelerationEffect;
+        player.skillMaxSpeedBonus += skill.maxSpeedEffect;
     }
+
+
+    private void AddSkills()
+    {
+        skills.Add(new Skill
+        {
+            skillName = "Shield 1",
+            skillBranch = 1,
+            skillCost = 1,
+            shieldEffect = 1,
+            maxSpeedEffect = -player.maxSpeed * 0.5f,
+            accelerationEffect = -player.acceleration * 0.35f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Shield 2",
+            skillBranch = 1,
+            skillCost = 1,
+            shieldEffect = 1,
+            accelerationEffect = -player.acceleration * 0.325f,
+            decelerationEffect = player.deceleration * 0.45f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Shield 3",
+            skillBranch = 1,
+            skillCost = 1,
+            shieldEffect = 1,
+            accelerationEffect = -player.acceleration * 0.10f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Speed 1",
+            skillBranch = 2,
+            skillCost = 1,
+            accelerationEffect = player.acceleration * 0.10f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Speed 2",
+            skillBranch = 2,
+            skillCost = 1,
+            maxSpeedEffect = player.maxSpeed * 0.5f,
+            decelerationEffect = -player.deceleration * 0.25f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Speed 3",
+            skillBranch = 2,
+            skillCost = 1,
+            maxSpeedEffect = player.maxSpeed * 0.5f,
+            accelerationEffect = player.acceleration * 0.5f,
+            decelerationEffect = -player.deceleration * 0.25f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Control 1",
+            skillBranch = 3,
+            skillCost = 1,
+            decelerationEffect = player.deceleration * 0.35f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Control 2",
+            skillBranch = 3,
+            skillCost = 1,
+            decelerationEffect = player.deceleration * 0.35f
+        });
+
+        skills.Add(new Skill
+        {
+            skillName = "Control 3",
+            skillBranch = 3,
+            skillCost = 1,
+            decelerationEffect = player.deceleration * 0.35f
+        });
+    }
+
 }

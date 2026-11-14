@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     [SerializeField] public float deceleration = 0.2f;
     [SerializeField] public float baseMaxSpeed = 20f;
 
-    private float skillMaxSpeedBonus = 0f;
+    public float skillMaxSpeedBonus = 0f;
     private float bounceMaxSpeedBonus = 0f;
 
     public float maxSpeed => baseMaxSpeed + skillMaxSpeedBonus + bounceMaxSpeedBonus;
@@ -68,7 +68,7 @@ public class Player : MonoBehaviour
 
 
     [Header("Skill Points")]
-    [SerializeField] public int skillPoints = 5;
+    [SerializeField] public int skillPoints = 0;
 
     void Awake()
     {
@@ -253,13 +253,6 @@ public class Player : MonoBehaviour
         }
     }
 
-    public void ApplySkills(Skill skill)
-    {
-        numOfShield += skill.shieldEffect;
-        acceleration += skill.accelerationEffect;
-        deceleration += skill.deccelerationEffect;
-        skillMaxSpeedBonus += skill.maxSpeedEffect;
-    }
     //Checks if player is dead, has a handler, and has a rigidbody. If none are true, player dies,
     //freezes, and all controls are taken away, until the total respawn time (3 secs) has elapsed.
     public void Death() 
