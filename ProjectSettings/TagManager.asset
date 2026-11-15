@@ -12,6 +12,8 @@ TagManager:
   - Phase
   - Water
   - UI
+  - Walls
+  - EnemyProjectile
   - Floor
   - Hazard
   - 
