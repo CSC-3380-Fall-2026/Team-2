@@ -63,6 +63,7 @@ public class Player : MonoBehaviour
     [SerializeField] private LayerMask deathLayerMask;
     [SerializeField] private LayerMask floorLayerMask;
     public bool isDead{get; private set;}
+    public static event System.Action Respawned; //fired when the player gets control back after dying
     private bool physicsSimmed;
     private bool controlsBlocked => isDead || (saveDataHandler.instance != null && saveDataHandler.instance.isLoading);
 
@@ -302,6 +303,7 @@ public class Player : MonoBehaviour
         rb.simulated = physicsSimmed;
         ChangeState(new PlayerIdleState(this));
         isDead = false;
+        Respawned?.Invoke();
     }
 
     //Clears movement variables, moves player to spawnpoint, returns player to idle state.

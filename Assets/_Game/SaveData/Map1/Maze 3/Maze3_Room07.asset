@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb77a415363d77548bb833a97bd3f33b, type: 3}
+  m_Name: Maze3_Room07
+  m_EditorClassIdentifier: Assembly-CSharp::RoomData
+  roomID: Maze3_Room07
+  currentScene: Maze 3
+  roomCenter: {x: 36, y: 0}
+  roomBounds: {x: 36, y: 20}
+  leftRoom: {fileID: 11400000, guid: de4294b6b1df2f049af3fe998ee4f69f, type: 2}
+  rightRoom: {fileID: 11400000, guid: 234e9967d816ab7438f4d4a6acbfe405, type: 2}
+  upRoom: {fileID: 0}
+  downRoom: {fileID: 11400000, guid: cce5060225aa1ff4496b8b0a776d22c7, type: 2}
+  isPuzzleSolved: 0
+  isEnemyAliveList: 
+  isEnemyAbleRespawnList: 
+  enemyLocationList: []
+  enemyNameList: []
