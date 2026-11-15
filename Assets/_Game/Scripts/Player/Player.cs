@@ -60,8 +60,12 @@ public class Player : MonoBehaviour
 
     [Header("Death Fields")]
     [SerializeField] private deathHandler playerDeathHandler;
+    [SerializeField] private LayerMask deathLayerMask;
+    [SerializeField] private LayerMask floorLayerMask;
     public bool isDead{get; private set;}
     private bool physicsSimmed;
+    private bool controlsBlocked => isDead || (saveDataHandler.instance != null && saveDataHandler.instance.isLoading);
+
 
     [Header("Skill Points")]
     [SerializeField] public int skillPoints = 5;
@@ -87,15 +91,15 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        //Debug Death Command: CTRL + K
-        Keyboard keyboard = Keyboard.current;
-        if (keyboard != null && keyboard.ctrlKey.isPressed && keyboard.kKey.wasPressedThisFrame) {
-            death();
+        
+        //If player is not touching the floor, the player should die
+        if (playerCollider.IsTouchingLayers(deathLayerMask) && !playerCollider.IsTouchingLayers(floorLayerMask)) {
+            Death();
         }
 
         //MOST IMPORTANT FUNCTION, EVERY ACTION THAT THE PLAYER 
         //CAN DO MUST HAVE THIS IF STATEMENT AT THE VERY TOP.
-        if (isDead) {
+        if (controlsBlocked) {
             return;
         }
         
@@ -106,7 +110,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (isDead) {
+        if (controlsBlocked) {
             return;
         }
 
@@ -126,7 +130,7 @@ public class Player : MonoBehaviour
 
     void OnMove(InputValue move)
     {
-        if (isDead) {
+        if (controlsBlocked) {
             return;
         }
 
@@ -135,7 +139,7 @@ public class Player : MonoBehaviour
 
     void OnSpin(InputValue spin)
     {
-        if (isDead) {
+        if (controlsBlocked) {
             return;
         }
         if (spin.isPressed && Keyboard.current != null && Keyboard.current.ctrlKey.isPressed) {
@@ -157,7 +161,7 @@ public class Player : MonoBehaviour
 
     void OnShoot(InputValue shoot)
     {
-        if (isDead) {
+        if (controlsBlocked) {
             return;
         }
 
@@ -258,9 +262,9 @@ public class Player : MonoBehaviour
     }
     //Checks if player is dead, has a handler, and has a rigidbody. If none are true, player dies,
     //freezes, and all controls are taken away, until the total respawn time (3 secs) has elapsed.
-    public void death() 
+    public void Death() 
     {
-        if (isDead) { 
+        if (controlsBlocked) { 
             return;
         }
         if (playerDeathHandler == null || !playerDeathHandler.isActiveAndEnabled) {
@@ -293,8 +297,7 @@ public class Player : MonoBehaviour
     }
 
     //Restores control to player.
-    private void finishDeath() 
-    {
+    private void finishDeath() {
         //Death Anim Finish Here V
 
         direction = Vector2.zero;
@@ -308,4 +311,28 @@ public class Player : MonoBehaviour
         isDead = false;
     }
 
+    //Clears movement variables, moves player to spawnpoint, returns player to idle state.
+    public void restoreCheckpointPos(Vector3 position) {
+        if (speedResetCoroutine != null) {
+            StopCoroutine(speedResetCoroutine);
+            speedResetCoroutine = null;
+        }
+
+        bounceMaxSpeedBonus = 0f;
+        direction = Vector2.zero;
+        currentCharge = 0f;
+        isSpinning = false;
+        isLaunching = false;
+        rb.linearVelocity = Vector2.zero;
+        rb.angularVelocity = 0f;
+        transform.position = position;
+        rb.position = (Vector2)position;
+
+        if (playerCollider != null) {
+            playerCollider.excludeLayers = 0;
+        }
+
+        ChangeState(new PlayerIdleState(this));
+        Physics2D.SyncTransforms();
+    }
 }

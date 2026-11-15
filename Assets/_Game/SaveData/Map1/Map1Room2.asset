@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb77a415363d77548bb833a97bd3f33b, type: 3}
+  m_Name: Map1Room2
+  m_EditorClassIdentifier: Assembly-CSharp::RoomData
+  roomID: Mp1Rm2
+  currentScene: Game 2
+  roomCenter: {x: 0, y: 0}
+  roomBounds: {x: 38, y: 20}
+  leftRoom: {fileID: 0}
+  rightRoom: {fileID: 11400000, guid: f3cc41fede571234387d66ac0747169d, type: 2}
+  upRoom: {fileID: 0}
+  downRoom: {fileID: 0}
+  isPuzzleSolved: 0
+  isEnemyAliveList: 
+  isEnemyAbleRespawnList: 
+  enemyLocationList: []
+  enemyNameList: []

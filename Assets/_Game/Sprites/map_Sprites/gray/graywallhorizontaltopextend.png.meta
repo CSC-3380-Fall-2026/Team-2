@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8bfaeacdd6c701d4cac9e070f4aa2cc6
+guid: e61a3b4299ef71d43a1b2a29e4dfa25b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3454938265897595384
-    second: graywallhorizontaltopextend_0
+      213: 1201076669959134119
+    second: graywallhorizontaltopextend 1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -115,7 +115,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: graywallhorizontaltopextend_0
+      name: graywallhorizontaltopextend 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -130,8 +130,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 80e0544c3f79d00d0800000000000000
-      internalID: -3454938265897595384
+      spriteID: 7ab5ce42ed41ba010800000000000000
+      internalID: 1201076669959134119
       vertices: []
       indices: 
       edges: []
@@ -140,7 +140,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 3424279f7cf441a47844fcdda4def7fa
+    spriteID: de0ff4613dd4b6e48a344b87afedcd34
     internalID: 0
     vertices: []
     indices: 
@@ -150,7 +150,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      graywallhorizontaltopextend_0: -3454938265897595384
+      graywallhorizontaltopextend 1_0: 1201076669959134119
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -8,6 +8,7 @@ public class CameraManager : MonoBehaviour
     GameObject playerObj;
     public Player playerScript;
     public SceneData sceneData;
+    public RoomData roomData;
     [SerializeField] public GameObject cameraBounds;
     [SerializeField] public Vector2 cameraCenter;
     public bool isCameraBound = true;
@@ -62,6 +63,7 @@ public class CameraManager : MonoBehaviour
             if (playerScript == null)
             {
                 yield return null;
+                Debug.Log("null");
             }
         }
 
@@ -72,6 +74,7 @@ public class CameraManager : MonoBehaviour
     {
         playerScript = player;
         player.cameraManager = this;
+        player.cameraBounds = this.cameraBounds;
     }
 
     private void ResetLevelVariables()
@@ -82,42 +85,63 @@ public class CameraManager : MonoBehaviour
 
     public void EnterRoom(Vector2 roomDirection)
     {
-        //SceneData nextRoomData = null;
-        //temporary solution, later we will get the direct point to the enemies from save file
-        //Debug.Log("Enter new room");
-        //Scene currentScene = SceneManager.GetActiveScene();
+        RoomData nextRoomData = null;
+        
+        Scene currentScene = SceneManager.GetActiveScene();
         
         if (roomDirection == Vector2.left)
         {
-            cameraCenter.x = cameraCenter.x -36;
+            cameraCenter.x = cameraCenter.x -38;
             //Debug.Log(cameraCenter);
-            //nextRoomData = sceneData.leftRoom;
+            nextRoomData = roomData.leftRoom;
         }
         if (roomDirection == Vector2.right)
         {
-            cameraCenter.x = cameraCenter.x + 36;
+            cameraCenter.x = cameraCenter.x + 38;
             //Debug.Log(cameraCenter);
-            //nextRoomData = sceneData.rightRoom;
+            nextRoomData = roomData.rightRoom;
         }
         if (roomDirection == Vector2.up)
         {
             cameraCenter.y = cameraCenter.y + 20;
             //Debug.Log(cameraCenter);
-            //nextRoomData = sceneData.upRoom;
+            nextRoomData = roomData.upRoom;
         }
         if (roomDirection == Vector2.down)
         {
             cameraCenter.y = cameraCenter.y - 20;
             //Debug.Log(cameraCenter);
-            //nextRoomData = sceneData.downRoom;
+            nextRoomData = roomData.downRoom;
         }
-        /*if (sceneData.currentScene!=nextRoomData.currentScene)
+        if (nextRoomData == null)
+        {   
+            CenterCamera(cameraCenter, cameraBounds.transform.localScale); //camera operates under normal room by room checking
+            return;
+        }
+
+        //CaptureCurrentRoomState();    
+
+        
+        if (roomData.currentScene!=nextRoomData.currentScene)
         {
+            //SceneManager.LoadScene("Game2");
+            //playerScript.gameObject.transform.position = new Vector3(playerScript.gameObject.transform.position.x - cameraCenter.x, playerScript.gameObject.transform.position.y - cameraCenter.y, playerScript.gameObject.transform.position.z);
+            Vector3 changedPosition = new Vector3(roomDirection.x*(roomData.roomBounds.x/2-3)*-1,roomDirection.y*(roomData.roomBounds.y/2-3)*-1,0);
+            playerScript.gameObject.transform.position = changedPosition;
+
+            //playerScript.gameObject.transform.position.y = playerScript.gameObject.transform.position.y - roomData.roomCenter.y
             SceneManager.LoadScene(nextRoomData.currentScene);
-        }*/
-        //sceneData = nextRoomData;
-        //cameraCenter = sceneData.roomCenter;
-        //cameraBounds = sceneData.roomBounds;
+        }
+        
+
+        roomData = nextRoomData;
+
+        //LoadCurrentRoomState();
+
+        cameraCenter = roomData.roomCenter;
+        cameraBounds.transform.localScale = roomData.roomBounds;
+
+        
         CenterCamera(cameraCenter, cameraBounds.transform.localScale);
     }
 

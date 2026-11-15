@@ -4,53 +4,37 @@ using UnityEngine.SceneManagement;
 
 //Checkpoint Handler that manages saving data when the player interacts with a checkpoint (via pressing O).
 //Additional implementations like the UI will also eventually be added here.
-public class checkpointHandler : MonoBehaviour, iSaveData {
+public class checkpointHandler : MonoBehaviour {
     
     //intRange = interaction range for checkpoints (currently 12 tiles).
-    //checkpoints = array of checkpoint references.
     [SerializeField, Min(0f)] private float intRange = 4f;
-    [SerializeField] private Transform[] checkpoints = new Transform[0];
-
+    
     //Method verifies if the user has pressed the O key. 
     private void Update() {
         Keyboard keyboard = Keyboard.current;
 
         if (keyboard != null && !keyboard.ctrlKey.isPressed && keyboard.oKey.wasPressedThisFrame) {
-            InteractWithCheckpoint();
+            interactWithCheckpoint();
         }
-    }
 
-    //Starts checking for refreshes on scene load.
-    private void OnEnable() {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-        refreshCheckpoints();
-    }
-
-    //Stops checking on destruction.
-    private void OnDisable() {
-        SceneManager.sceneLoaded -= OnSceneLoaded;
-    }
-
-    //Refreshs checkpoint array on request after scene load.
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
-        refreshCheckpoints();
-    }
-
-    //Clears old array, searches loaded scene for checkpoint objects, loads them into array.
-    private void refreshCheckpoints() {
-        checkpoints = new Transform[0];
-        GameObject checkpoint = GameObject.Find("goldsavebrightshine1_0"); //Change this if checkpoint sprite name changes.
-        if (checkpoint == null) {
+        Player player = GetComponent<Player>();
+        
+        if (player == null || player.isDead) {
             return;
         }
-
-        checkpoints = new Transform[] {checkpoint.transform}; 
-        Debug.Log("Checkpoints Refreshed.");
+        if (saveDataHandler.instance != null && saveDataHandler.instance.isLoading) {
+            return;
+        }
     }
 
     //Checks for nearest checkpoint, if none is in range or no saveHandler, return, otherwise saves.
-    public void InteractWithCheckpoint() {
-        Transform checkpoint = FindNearestCheckpoint();
+    public void interactWithCheckpoint() {
+        Player player = GetComponent<Player>();
+        checkpointIdent checkpoint = findNearestCheckpoint();
+
+        if (player == null || player.isDead) {
+            return;
+        }
 
         if (checkpoint == null) {
             return;
@@ -61,22 +45,26 @@ public class checkpointHandler : MonoBehaviour, iSaveData {
             return;
         }
 
-        //Checkpoint data goes here!
-        saveDataHandler.instance.saveFile();
+        saveDataHandler.instance.saveCheckpoint(checkpoint);
         Debug.Log("Save Called.");
     }
 
     //Searches for nearest checkpoint in range, via math calculations.
-    private Transform FindNearestCheckpoint() {
-        Transform nearestCheckpoint = null;
+    private checkpointIdent findNearestCheckpoint() {
+        checkpointIdent nearestCheckpoint = null;
         float nearestDistanceSquared = intRange * intRange;
+        checkpointIdent[] checkpoints = FindObjectsByType<checkpointIdent>();
 
-        foreach (Transform checkpoint in checkpoints) {
-            if (checkpoint == null) {
+        foreach (checkpointIdent checkpoint in checkpoints) {
+            if (!checkpoint.isActiveAndEnabled) {
                 continue;
             }
 
-            Vector2 offset = (Vector2)checkpoint.position - (Vector2)transform.position;
+            if (checkpoint.gameObject.scene != SceneManager.GetActiveScene()) {
+                continue;
+            }
+
+            Vector2 offset = (Vector2)checkpoint.transform.position - (Vector2)transform.position;
             float distanceSquared = offset.sqrMagnitude;
 
             if (distanceSquared <= nearestDistanceSquared) {
@@ -88,13 +76,4 @@ public class checkpointHandler : MonoBehaviour, iSaveData {
         return nearestCheckpoint;
     }
 
-    //Called to restore data if necessary.
-    public void loadData(SaveData data) {
-        //Checkpoint Data goes here!
-    }
-
-    //Called when collection info to save.
-    public void saveData(ref SaveData data) {
-        //Checkpoint Data goes here!
-    }
 }
