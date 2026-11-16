@@ -27,7 +27,6 @@ public class SkillTree : MonoBehaviour
         DontDestroyOnLoad(gameObject);
         player = FindAnyObjectByType<Player>();
         AddSkills();
-        player.skillPoints = 9;
         UpdateSkillPointsUI();
         
 
