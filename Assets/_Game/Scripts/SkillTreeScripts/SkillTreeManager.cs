@@ -26,9 +26,13 @@ public class SkillTree : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
         player = FindAnyObjectByType<Player>();
+        if (player == null)
+        {
+            Debug.LogError("Player Not Found!");
+            return;
+        }
         AddSkills();
         UpdateSkillPointsUI();
-        
 
     }
 
@@ -41,7 +45,7 @@ public class SkillTree : MonoBehaviour
     }
     public void UnlockSkill(int index)
     {
-       
+
 
         //index check
         if (index < 0 || index >= skills.Count)
@@ -98,6 +102,7 @@ public class SkillTree : MonoBehaviour
             return;
         }
 
+        UpdateSkillPointsUI();
     }
 
 
