@@ -1,16 +1,22 @@
 using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
+using TMPro;
+using Unity.VisualScripting;
+using UnityEngine.UI;
+
 
 public class SkillTreeUI : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+private SkillTree skillTree;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+void Start()
+{
+    skillTree = FindAnyObjectByType<SkillTree>();
+
+    skillTree.UnlockSkill;
 }
+}
+
+
+//PUT BUTTON CODE IN HERE
