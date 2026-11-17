@@ -69,7 +69,7 @@ public class Player : MonoBehaviour
 
 
     [Header("Skill Points")]
-    [SerializeField] public int skillPoints = 0;
+    public int skillPoints = 0;
 
     void Awake()
     {

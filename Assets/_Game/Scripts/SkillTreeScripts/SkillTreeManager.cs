@@ -1,19 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using TMPro;
-using Unity.VisualScripting;
-using UnityEngine.UI;
+
 
 
 public class SkillTree : MonoBehaviour
 {
     public Player player;
     public List<Skill> skills = new List<Skill>();
-
-    public TMP_Text skillPointsText;
-    public Button[] skillButtons;
-    public TMP_Text[] skillButtonTexts;
 
     private static SkillTree instance;
     private void Awake()
@@ -32,17 +26,11 @@ public class SkillTree : MonoBehaviour
             return;
         }
         AddSkills();
-        UpdateSkillPointsUI();
+
 
     }
 
-    public void UpdateSkillPointsUI()
-    {
-        if (player != null && skillPointsText != null)
-        {
-            skillPointsText.text = "Skill Points: " + player.skillPoints;
-        }
-    }
+
     public void UnlockSkill(int index)
     {
 
@@ -68,8 +56,6 @@ public class SkillTree : MonoBehaviour
             player.skillPoints -= skill.skillCost;
             skill.isUnlocked = true;
             ApplySkills(skill);
-            UpdateSkillPointsUI();
-            skillButtonTexts[index].text = "Skill Unlocked";
             Debug.Log("Unlocked Skill: " + skill.skillName);
             Debug.Log("Remainging SKill Points: " + player.skillPoints);
 
@@ -102,7 +88,6 @@ public class SkillTree : MonoBehaviour
             return;
         }
 
-        UpdateSkillPointsUI();
     }
 
 
