@@ -9,8 +9,9 @@ public class SkillTreeUI : MonoBehaviour
     public TMP_Text skillPointsText;
     public Button[] skillButtons;
     public TMP_Text[] skillButtonText;
-    public Player player;
 
+    public Player player;
+    public TMP_Text[] skillDescText;
     private void Start()
     {
         skillTree = FindAnyObjectByType<SkillTree>();
@@ -21,18 +22,20 @@ public class SkillTreeUI : MonoBehaviour
             return;
         }
 
-        // Get Player reference from SkillTree
         player = skillTree.player;
 
         UpdateSkillPointsUI();
+        
 
-        // Update button text for previously unlocked skills
+
         for (int i = 0; i < skillTree.skills.Count; i++)
         {
+            ShowSkillDesc(i);
             if (skillTree.skills[i].isUnlocked)
             {
                 skillButtonText[i].text = "Skill Unlocked";
             }
+
         }
     }
 
@@ -60,5 +63,19 @@ public class SkillTreeUI : MonoBehaviour
         {
             skillButtonText[index].text = "Skill Unlocked";
         }
+    }
+
+
+    public void ShowSkillDesc(int index)
+    {
+        if (index < 0 || index >= skillTree.skills.Count)
+            return;
+
+        skillDescText[index].text = skillTree.skills[index].skillName;
+    }
+
+    public void CloseSkillTree()
+    {
+        skillTree.CloseSkillTree();
     }
 }

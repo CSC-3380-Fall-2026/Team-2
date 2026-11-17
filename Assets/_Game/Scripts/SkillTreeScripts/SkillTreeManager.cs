@@ -8,9 +8,9 @@ public class SkillTree : MonoBehaviour
 {
     public Player player;
     public List<Skill> skills = new List<Skill>();
-
     private static SkillTree instance;
     public string previousScene;
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -27,6 +27,7 @@ public class SkillTree : MonoBehaviour
             return;
         }
         AddSkills();
+        //player.skillPoints = 9;
 
 
     }
@@ -34,9 +35,6 @@ public class SkillTree : MonoBehaviour
 
     public void UnlockSkill(int index)
     {
-
-
-        //index check
         if (index < 0 || index >= skills.Count)
         {
             Debug.Log("Invalid Index");
@@ -102,6 +100,7 @@ public class SkillTree : MonoBehaviour
         SceneManager.LoadScene(previousScene);
     }
 
+
     public void ApplySkills(Skill skill)
     {
         if (player == null)
@@ -109,7 +108,6 @@ public class SkillTree : MonoBehaviour
             Debug.LogError("player not found");
             return;
         }
-
         player.numOfShield += skill.shieldEffect;
         player.acceleration += skill.accelerationEffect;
         player.deceleration += skill.decelerationEffect;
@@ -121,7 +119,7 @@ public class SkillTree : MonoBehaviour
     {
         skills.Add(new Skill
         {
-            skillName = "Shield 1",
+            skillName = "Shield 1\nCost: 1\nShield+\nTop Speed-\nAcceleration-",
             skillBranch = 1,
             skillCost = 1,
             shieldEffect = 1,
@@ -131,7 +129,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Shield 2",
+            skillName = "Shield 2\nCost: 1\nShield+\nAcceleration-\nDeceleration+",
             skillBranch = 1,
             skillCost = 1,
             shieldEffect = 1,
@@ -141,16 +139,16 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Shield 3",
+            skillName = "Shield 3\n Cost: 1\nShield+\nTop Speed-",
             skillBranch = 1,
             skillCost = 1,
             shieldEffect = 1,
-            accelerationEffect = -player.acceleration * 0.10f
+            maxSpeedEffect = -player.maxSpeed * 0.1f
         });
 
         skills.Add(new Skill
         {
-            skillName = "Speed 1",
+            skillName = "Speed 1\nCost: 1\nAcceleration+",
             skillBranch = 2,
             skillCost = 1,
             accelerationEffect = player.acceleration * 0.10f
@@ -158,7 +156,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Speed 2",
+            skillName = "Speed 2\nCost: 1\nTop Speed+\nDeceleration-",
             skillBranch = 2,
             skillCost = 1,
             maxSpeedEffect = player.maxSpeed * 0.5f,
@@ -167,7 +165,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Speed 3",
+            skillName = "Speed 3\nCost: 1\nTop Speed+\nAcceleration+\nDeceleration-",
             skillBranch = 2,
             skillCost = 1,
             maxSpeedEffect = player.maxSpeed * 0.5f,
@@ -177,7 +175,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Control 1",
+            skillName = "Control 1\n Deceleration+",
             skillBranch = 3,
             skillCost = 1,
             decelerationEffect = player.deceleration * 0.35f
@@ -185,7 +183,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Control 2",
+            skillName = "Control 2\nCost: 1\nDeceleration+",
             skillBranch = 3,
             skillCost = 1,
             decelerationEffect = player.deceleration * 0.35f
@@ -193,7 +191,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Control 3",
+            skillName = "Control 3\nCost: 1\nDeceleration+",
             skillBranch = 3,
             skillCost = 1,
             decelerationEffect = player.deceleration * 0.35f
