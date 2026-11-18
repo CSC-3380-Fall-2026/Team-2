@@ -21,9 +21,8 @@ public class SkillTreeUI : MonoBehaviour
             Debug.LogError("Skill Tree OBJ not found");
             return;
         }
-
+        skillTree.Initialize();
         player = skillTree.player;
-
         UpdateSkillPointsUI();
         
 

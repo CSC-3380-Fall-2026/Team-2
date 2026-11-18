@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.InputSystem;
 
 
 public class SkillTree : MonoBehaviour
@@ -20,18 +20,29 @@ public class SkillTree : MonoBehaviour
         }
         instance = this;
         DontDestroyOnLoad(gameObject);
+        
+    }
+    public void Initialize(){
         player = FindAnyObjectByType<Player>();
         if (player == null)
         {
             Debug.LogError("Player Not Found!");
             return;
         }
-        AddSkills();
-        //player.skillPoints = 9;
-
-
+        Debug.Log("Skill Initialized");
+        if(skills.Count == 0)
+        {
+            AddSkills();
+        }
     }
 
+    public void Update()
+    {
+        if (Keyboard.current.mKey.wasPressedThisFrame)
+        {
+            OpenSkillTree();
+        }
+    }
 
     public void UnlockSkill(int index)
     {

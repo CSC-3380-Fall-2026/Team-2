@@ -35,8 +35,6 @@ public class Player : MonoBehaviour
     [Header("Components")]
     public Rigidbody2D rb;
     public CircleCollider2D playerCollider;
-    public GameObject playerObject;
-    [SerializeField] private static Player instance;
     
     [SerializeField] public CameraManager cameraManager;
     
@@ -50,7 +48,8 @@ public class Player : MonoBehaviour
 
     public float skillMaxSpeedBonus = 0f;
     private float bounceMaxSpeedBonus = 0f;
-
+    public GameObject playerObject;
+    private static Player instance;
     public float maxSpeed => baseMaxSpeed + skillMaxSpeedBonus + bounceMaxSpeedBonus;
     public Vector2 direction;
     //Perk Stuff
@@ -69,18 +68,18 @@ public class Player : MonoBehaviour
 
 
     [Header("Skill Points")]
-    public int skillPoints = 0;
+    public int skillPoints = 9;
 
     void Awake()
     {
         if (instance != null && instance != this)
         {
-            Destroy(playerObject);
+            Destroy(gameObject);
             return;
         }
 
         instance = this;
-        DontDestroyOnLoad(playerObject);
+        DontDestroyOnLoad(gameObject);
         gameObject.tag = "Player";
     }
     void Start()
@@ -230,8 +229,31 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        cameraManager = FindAnyObjectByType<cameraManager>();
+        GameObject bounds = GameObject.Find("CameraBounds");
+
+        if(bounds != null)
+        {
+            cameraBounds = bounds;
+        }
+    }
+
     void checkRoom()
     {
+        if (cameraBounds == null || cameraManager == null)
+        return;
         if (gameObject.transform.position.x <= cameraBounds.transform.position.x - 18)
         {
             cameraManager.EnterRoom(Vector2.left);
