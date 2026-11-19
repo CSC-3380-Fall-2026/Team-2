@@ -248,22 +248,22 @@ public class Player : MonoBehaviour
 
     void checkRoom()
     {
-        if (gameObject.transform.position.x <= cameraBounds.transform.position.x - 18)
+        if (gameObject.transform.position.x <= cameraBounds.transform.position.x - cameraBounds.transform.localScale.x/2)
         {
             cameraManager.EnterRoom(Vector2.left);
             //OnUnBindCamera();
         }
-        if (gameObject.transform.position.x >= cameraBounds.transform.position.x + 18)
+        if (gameObject.transform.position.x >= cameraBounds.transform.position.x + cameraBounds.transform.localScale.x/2)
         {
             cameraManager.EnterRoom(Vector2.right);
             //OnUnBindCamera();
         }
-        if (gameObject.transform.position.y <= cameraBounds.transform.position.y - 10)
+        if (gameObject.transform.position.y <= cameraBounds.transform.position.y - cameraBounds.transform.localScale.y/2)
         {
             cameraManager.EnterRoom(Vector2.down);
             //OnUnBindCamera();
         }
-        if (gameObject.transform.position.y >= cameraBounds.transform.position.y + 10)
+        if (gameObject.transform.position.y >= cameraBounds.transform.position.y + cameraBounds.transform.localScale.y/2)
         {
             cameraManager.EnterRoom(Vector2.up);
             //OnUnBindCamera();

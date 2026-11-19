@@ -16,8 +16,8 @@ MonoBehaviour:
   currentScene: Maze 4
   roomCenter: {x: 0, y: 0}
   roomBounds: {x: 38, y: 20}
-  leftRoom: {fileID: 0}
-  rightRoom: {fileID: 0}
+  leftRoom: {fileID: 11400000, guid: f10bb18f37a124043853cf368bf50594, type: 2}
+  rightRoom: {fileID: 11400000, guid: 5610cc89ab9baba4caafa5a1ebd2cb67, type: 2}
   upRoom: {fileID: 11400000, guid: f4245b506c7b4154b96ea41d37a5e8d1, type: 2}
   downRoom: {fileID: 0}
   isPuzzleSolved: 0

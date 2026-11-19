@@ -187,8 +187,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyAI
   moveSpeed: 1.5
-  detectionRange: 10
-  stopChasingRange: 10.09
+  detectionRange: 114
+  stopChasingRange: 115
   attackRange: 0.9
   attackDamage: 1
   attackDelay: 1.2
