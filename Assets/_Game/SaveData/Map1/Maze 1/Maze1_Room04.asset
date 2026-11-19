@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RoomData
   roomID: Maze1_Room04
   currentScene: Maze 1 (Room Grid)
-  roomCenter: {x: 36, y: 20}
-  roomBounds: {x: 36, y: 20}
+  roomCenter: {x: 38, y: 20}
+  roomBounds: {x: 38, y: 20}
   leftRoom: {fileID: 11400000, guid: 40ae72ae113ca2044aeb83d61f79c865, type: 2}
   rightRoom: {fileID: 11400000, guid: eafcb3f086337cc4bbb6e12134cc6642, type: 2}
   upRoom: {fileID: 0}
