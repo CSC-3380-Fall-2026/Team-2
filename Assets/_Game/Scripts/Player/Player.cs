@@ -70,7 +70,7 @@ public class Player : MonoBehaviour
 
 
     [Header("Skill Points")]
-    [System.NonSerialized] public int skillPoints = 18;
+    [System.NonSerialized] public int skillPoints = 9;
 
     void Awake()
     {

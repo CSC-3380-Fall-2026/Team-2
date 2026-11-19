@@ -108,11 +108,10 @@ public class SkillTree : MonoBehaviour
     {
         skills.Add(new Skill
         {
-            skillName = "Shield 1\nCost: 1\nShield+\nTop Speed-\nAcceleration-",
+            skillName = "Shield 1\nCost: 1\nShield+\nAcceleration-",
             skillBranch = 1,
             skillCost = 1,
             shieldEffect = 1,
-            maxSpeedEffect = -player.maxSpeed * 0.5f,
             accelerationEffect = -player.acceleration * 0.35f
         });
 
