@@ -122,7 +122,7 @@ public class CameraManager : MonoBehaviour
         //CaptureCurrentRoomState();    
 
         
-        /*if (roomData.currentScene!=nextRoomData.currentScene)
+        if (roomData.currentScene!=nextRoomData.currentScene)
         {
             //SceneManager.LoadScene("Game2");
             //playerScript.gameObject.transform.position = new Vector3(playerScript.gameObject.transform.position.x - cameraCenter.x, playerScript.gameObject.transform.position.y - cameraCenter.y, playerScript.gameObject.transform.position.z);
@@ -131,7 +131,7 @@ public class CameraManager : MonoBehaviour
 
             //playerScript.gameObject.transform.position.y = playerScript.gameObject.transform.position.y - roomData.roomCenter.y
             SceneManager.LoadScene(nextRoomData.currentScene);
-        }*/
+        }
         
 
         roomData = nextRoomData;
