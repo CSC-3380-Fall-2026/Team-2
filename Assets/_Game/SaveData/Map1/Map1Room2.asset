@@ -16,7 +16,7 @@ MonoBehaviour:
   currentScene: Game 2
   roomCenter: {x: 0, y: 0}
   roomBounds: {x: 38, y: 20}
-  leftRoom: {fileID: 0}
+  leftRoom: {fileID: 11400000, guid: 53cdb10deea4d9049933767febcb525f, type: 2}
   rightRoom: {fileID: 11400000, guid: 27b2ee04171e42640837186395d00637, type: 2}
   upRoom: {fileID: 0}
   downRoom: {fileID: 0}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Map1Room1
   m_EditorClassIdentifier: Assembly-CSharp::RoomData
   roomID: Mp1Sc1Rm1
-  currentScene: Game
+  currentScene: Game (With HUD)
   roomCenter: {x: 0, y: 0}
   roomBounds: {x: 38, y: 20}
   leftRoom: {fileID: 0}

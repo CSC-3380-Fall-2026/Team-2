@@ -15,7 +15,7 @@ MonoBehaviour:
   roomID: Maze2_Room01
   currentScene: Maze 2 (Room Grid)
   roomCenter: {x: 0, y: 0}
-  roomBounds: {x: 36, y: 20}
+  roomBounds: {x: 38, y: 20}
   leftRoom: {fileID: 0}
   rightRoom: {fileID: 11400000, guid: 86cfb4be937a5eb4aa934d908e03e707, type: 2}
   upRoom: {fileID: 0}
