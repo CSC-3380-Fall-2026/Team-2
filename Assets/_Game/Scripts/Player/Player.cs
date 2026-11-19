@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
     public float maxCharge = 30f;
     public float spinDecayRate = 2f;
     public float spinDeceleration = 1f;
-    
+
     public bool isSpinning;
     public bool isLaunching;
 
@@ -36,10 +36,10 @@ public class Player : MonoBehaviour
     public Rigidbody2D rb;
     public CircleCollider2D playerCollider;
     public GameObject playerObject;
-    [SerializeField] private static Player instance;
-    
+    public static Player instance;
+
     [SerializeField] public CameraManager cameraManager;
-    
+
     public GameObject cameraBounds;
     public Vector2 cameraCenter;
 
@@ -62,14 +62,15 @@ public class Player : MonoBehaviour
     [SerializeField] private deathHandler playerDeathHandler;
     [SerializeField] private LayerMask deathLayerMask;
     [SerializeField] private LayerMask floorLayerMask;
-    public bool isDead{get; private set;}
+    public bool isDead { get; private set; }
     public static event System.Action Respawned; //fired when the player gets control back after dying
     private bool physicsSimmed;
-    private bool controlsBlocked => isDead || (saveDataHandler.instance != null && saveDataHandler.instance.isLoading);
+    private bool controlsBlocked => isDead || isSkillTreeOpen || (saveDataHandler.instance != null && saveDataHandler.instance.isLoading);
+    public bool isSkillTreeOpen;
 
 
     [Header("Skill Points")]
-    public int skillPoints = 0;
+    [System.NonSerialized] public int skillPoints = 18;
 
     void Awake()
     {
@@ -92,26 +93,37 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        
+
         //If player is not touching the floor, the player should die
-        if (playerCollider.IsTouchingLayers(deathLayerMask) && !playerCollider.IsTouchingLayers(floorLayerMask)) {
-            Death();
+        if (playerCollider.IsTouchingLayers(deathLayerMask) && !playerCollider.IsTouchingLayers(floorLayerMask))
+        {
+            if (numOfShield >= 1)
+            {
+                numOfShield -= 1;
+                return;
+            }
+            else
+            {
+                Death();
+            }
         }
 
         //MOST IMPORTANT FUNCTION, EVERY ACTION THAT THE PLAYER 
         //CAN DO MUST HAVE THIS IF STATEMENT AT THE VERY TOP.
-        if (controlsBlocked) {
+        if (controlsBlocked)
+        {
             return;
         }
-        
-        
+
+
         currentState.Update();
         HandlePhasing();
     }
 
     void FixedUpdate()
     {
-        if (controlsBlocked) {
+        if (controlsBlocked)
+        {
             return;
         }
 
@@ -131,7 +143,8 @@ public class Player : MonoBehaviour
 
     void OnMove(InputValue move)
     {
-        if (controlsBlocked) {
+        if (controlsBlocked)
+        {
             return;
         }
 
@@ -140,10 +153,12 @@ public class Player : MonoBehaviour
 
     void OnSpin(InputValue spin)
     {
-        if (controlsBlocked) {
+        if (controlsBlocked)
+        {
             return;
         }
-        if (spin.isPressed && Keyboard.current != null && Keyboard.current.ctrlKey.isPressed) {
+        if (spin.isPressed && Keyboard.current != null && Keyboard.current.ctrlKey.isPressed)
+        {
             return;
         }
 
@@ -162,7 +177,8 @@ public class Player : MonoBehaviour
 
     void OnShoot(InputValue shoot)
     {
-        if (controlsBlocked) {
+        if (controlsBlocked)
+        {
             return;
         }
 
@@ -256,20 +272,23 @@ public class Player : MonoBehaviour
 
     //Checks if player is dead, has a handler, and has a rigidbody. If none are true, player dies,
     //freezes, and all controls are taken away, until the total respawn time (3 secs) has elapsed.
-    public void Death() 
+    public void Death()
     {
-        if (controlsBlocked) { 
+        if (controlsBlocked)
+        {
             return;
         }
-        if (playerDeathHandler == null || !playerDeathHandler.isActiveAndEnabled) {
+        if (playerDeathHandler == null || !playerDeathHandler.isActiveAndEnabled)
+        {
             Debug.LogError("Add active deathHandler to the Player prefab. Player.cs", this);
             return;
         }
-        if (rb == null) {
-             Debug.LogError("Player missing RigidBody. Player.cs", this);
-             return;
+        if (rb == null)
+        {
+            Debug.LogError("Player missing RigidBody. Player.cs", this);
+            return;
         }
-        
+
         isDead = true;
         Debug.Log("Debug Kill Called.");
         direction = Vector2.zero;
@@ -284,14 +303,15 @@ public class Player : MonoBehaviour
 
         //Death Amim Starts Here V
 
-        if (!playerDeathHandler.handleDeath(finishDeath)) 
+        if (!playerDeathHandler.handleDeath(finishDeath))
         {
             finishDeath();
         }
     }
 
     //Restores control to player.
-    private void finishDeath() {
+    private void finishDeath()
+    {
         //Death Anim Finish Here V
 
         direction = Vector2.zero;
@@ -307,8 +327,10 @@ public class Player : MonoBehaviour
     }
 
     //Clears movement variables, moves player to spawnpoint, returns player to idle state.
-    public void restoreCheckpointPos(Vector3 position) {
-        if (speedResetCoroutine != null) {
+    public void restoreCheckpointPos(Vector3 position)
+    {
+        if (speedResetCoroutine != null)
+        {
             StopCoroutine(speedResetCoroutine);
             speedResetCoroutine = null;
         }
@@ -323,7 +345,8 @@ public class Player : MonoBehaviour
         transform.position = position;
         rb.position = (Vector2)position;
 
-        if (playerCollider != null) {
+        if (playerCollider != null)
+        {
             playerCollider.excludeLayers = 0;
         }
 

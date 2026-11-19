@@ -74,8 +74,5 @@ public class SkillTreeUI : MonoBehaviour
         skillDescText[index].text = skillTree.skills[index].skillName;
     }
 
-    public void CloseSkillTree()
-    {
-        skillTree.CloseSkillTree();
-    }
+
 }

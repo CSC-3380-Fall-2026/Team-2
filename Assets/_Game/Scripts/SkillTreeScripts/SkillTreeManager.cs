@@ -9,7 +9,7 @@ public class SkillTree : MonoBehaviour
     public Player player;
     public List<Skill> skills = new List<Skill>();
     private static SkillTree instance;
-    public string previousScene;
+
 
     private void Awake()
     {
@@ -27,7 +27,6 @@ public class SkillTree : MonoBehaviour
             return;
         }
         AddSkills();
-        //player.skillPoints = 9;
 
 
     }
@@ -89,16 +88,6 @@ public class SkillTree : MonoBehaviour
 
     }
 
-    public void OpenSkillTree()
-    {
-        previousScene = SceneManager.GetActiveScene().name;
-        SceneManager.LoadScene("SkillTreeScene");
-    }
-
-    public void CloseSkillTree()
-    {
-        SceneManager.LoadScene(previousScene);
-    }
 
 
     public void ApplySkills(Skill skill)
