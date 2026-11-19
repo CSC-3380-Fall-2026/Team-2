@@ -1,18 +1,16 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.SceneManagement;
-using TMPro;
-using Unity.VisualScripting;
+
 
 
 public class SkillTree : MonoBehaviour
 {
     public Player player;
     public List<Skill> skills = new List<Skill>();
-
-    public TMP_Text skillPointsText;
-
     private static SkillTree instance;
+
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -23,31 +21,25 @@ public class SkillTree : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
         player = FindAnyObjectByType<Player>();
-        AddSkills();
-        UpdateSkillPointsUI();
-
-    }
-
-    public void UpdateSkillPointsUI()
-    {
-        if (player != null && skillPointsText != null)
+        if (player == null)
         {
-            skillPointsText.text = "Skill Points: " + player.skillPoints;
+            Debug.LogError("Player Not Found!");
+            return;
         }
+        AddSkills();
+
+
     }
+
+
     public void UnlockSkill(int index)
     {
-
-
-        //index checl
         if (index < 0 || index >= skills.Count)
         {
             Debug.Log("Invalid Index");
             return;
         }
-
         Skill skill = skills[index];
-
         if (skill.isUnlocked) { return; }
 
         if (player == null)
@@ -62,9 +54,9 @@ public class SkillTree : MonoBehaviour
             player.skillPoints -= skill.skillCost;
             skill.isUnlocked = true;
             ApplySkills(skill);
-            UpdateSkillPointsUI();
             Debug.Log("Unlocked Skill: " + skill.skillName);
             Debug.Log("Remainging SKill Points: " + player.skillPoints);
+
             return;
         }
         else
@@ -97,6 +89,7 @@ public class SkillTree : MonoBehaviour
     }
 
 
+
     public void ApplySkills(Skill skill)
     {
         if (player == null)
@@ -104,7 +97,6 @@ public class SkillTree : MonoBehaviour
             Debug.LogError("player not found");
             return;
         }
-
         player.numOfShield += skill.shieldEffect;
         player.acceleration += skill.accelerationEffect;
         player.deceleration += skill.decelerationEffect;
@@ -116,17 +108,16 @@ public class SkillTree : MonoBehaviour
     {
         skills.Add(new Skill
         {
-            skillName = "Shield 1",
+            skillName = "Shield 1\nCost: 1\nShield+\nAcceleration-",
             skillBranch = 1,
             skillCost = 1,
             shieldEffect = 1,
-            maxSpeedEffect = -player.maxSpeed * 0.5f,
             accelerationEffect = -player.acceleration * 0.35f
         });
 
         skills.Add(new Skill
         {
-            skillName = "Shield 2",
+            skillName = "Shield 2\nCost: 1\nShield+\nAcceleration-\nDeceleration+",
             skillBranch = 1,
             skillCost = 1,
             shieldEffect = 1,
@@ -136,16 +127,16 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Shield 3",
+            skillName = "Shield 3\n Cost: 1\nShield+\nTop Speed-",
             skillBranch = 1,
             skillCost = 1,
             shieldEffect = 1,
-            accelerationEffect = -player.acceleration * 0.10f
+            maxSpeedEffect = -player.maxSpeed * 0.1f
         });
 
         skills.Add(new Skill
         {
-            skillName = "Speed 1",
+            skillName = "Speed 1\nCost: 1\nAcceleration+",
             skillBranch = 2,
             skillCost = 1,
             accelerationEffect = player.acceleration * 0.10f
@@ -153,7 +144,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Speed 2",
+            skillName = "Speed 2\nCost: 1\nTop Speed+\nDeceleration-",
             skillBranch = 2,
             skillCost = 1,
             maxSpeedEffect = player.maxSpeed * 0.5f,
@@ -162,7 +153,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Speed 3",
+            skillName = "Speed 3\nCost: 1\nTop Speed+\nAcceleration+\nDeceleration-",
             skillBranch = 2,
             skillCost = 1,
             maxSpeedEffect = player.maxSpeed * 0.5f,
@@ -172,7 +163,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Control 1",
+            skillName = "Control 1\n Deceleration+",
             skillBranch = 3,
             skillCost = 1,
             decelerationEffect = player.deceleration * 0.35f
@@ -180,7 +171,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Control 2",
+            skillName = "Control 2\nCost: 1\nDeceleration+",
             skillBranch = 3,
             skillCost = 1,
             decelerationEffect = player.deceleration * 0.35f
@@ -188,7 +179,7 @@ public class SkillTree : MonoBehaviour
 
         skills.Add(new Skill
         {
-            skillName = "Control 3",
+            skillName = "Control 3\nCost: 1\nDeceleration+",
             skillBranch = 3,
             skillCost = 1,
             decelerationEffect = player.deceleration * 0.35f
