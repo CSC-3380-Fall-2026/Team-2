@@ -8,54 +8,36 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/fixed-rooms/Game.unity
     guid: 49ccb2ba02a2fff4e8e5bbbad37c6dba
-  - enabled: 0
-    path: Assets/Scenes/archived-rooms/Game 2.unity
-    guid: 2c74edcb06803d34b972f796b58762d7
+  - enabled: 1
+    path: Assets/Scenes/fixed-rooms/Game 2.unity
+    guid: 81d916b1f47001f4390c0438a5f78532
   - enabled: 1
     path: Assets/Scenes/Start Menu.unity
     guid: 81f13e0263678d94894640b7f3f02292
   - enabled: 0
     path: Assets/Scenes/SkillTreeScene.unity
     guid: 6e38c43fba46e664abdac0fa8e54d783
-  - enabled: 0
-    path: Assets/Scenes/archived-rooms/Maze 3.unity
-    guid: 464f5f62c42172c499702b35b4d85e6d
+  - enabled: 1
+    path: Assets/Scenes/fixed-rooms/Maze 3.unity
+    guid: 32ab4dad760a2da42a18e370b365a03a
   - enabled: 0
     path: Assets/Scenes/archived-rooms/Maze 2.unity
     guid: 2abcaf5f6b609154492028b4321941ca
   - enabled: 0
     path: Assets/Scenes/archived-rooms/Maze 1.unity
     guid: 4803fbd73bad2354a8fc0b1bd6c97595
-  - enabled: 0
-    path: Assets/Scenes/archived-rooms/Maze 1 (Room Grid).unity
-    guid: 88f2ad1096204e53b93adfda3f9f0e78
-  - enabled: 0
-    path: Assets/Scenes/archived-rooms/Maze 2 (Room Grid).unity
-    guid: 901ff9d460b74558ae22b06470a8a1b3
-  - enabled: 0
-    path: Assets/Scenes/archived-rooms/Maze 4.unity
-    guid: dd16278d82d0c584a88d88f5ea91e5c8
   - enabled: 1
-    path: Assets/Scenes/Game.unity
-    guid: 44168dafd500f30408808cd98a6dec75
+    path: Assets/Scenes/fixed-rooms/Maze 1 (Room Grid).unity
+    guid: 6f7ba0c4b6745aa48a5cc5c50842d615
   - enabled: 1
-    path: Assets/Scenes/Game 2.unity
-    guid: acd67dc52b3a3544d9e368dbed30008f
+    path: Assets/Scenes/fixed-rooms/Maze 2 (Room Grid).unity
+    guid: 3049c7f08b8a6a54e8770d0834c78823
   - enabled: 1
-    path: Assets/Scenes/Maze 1 (Room Grid).unity
-    guid: 8fe15971ef71953448bb930058072003
-  - enabled: 1
-    path: Assets/Scenes/Maze 2 (Room Grid).unity
-    guid: 8099a2c98db2a6c4bbc1586048c455ad
-  - enabled: 1
-    path: Assets/Scenes/Maze 3.unity
-    guid: 857e2e6232ecd0b4886665454583480a
-  - enabled: 1
-    path: Assets/Scenes/Maze 4.unity
-    guid: c254cc84fbdf5c547ae687172e810eb9
+    path: Assets/Scenes/fixed-rooms/Maze 4.unity
+    guid: 6f71c05d4f3b10e4489f7c0d29ce7fb3
   - enabled: 1
     path: Assets/Scenes/Boss Room.unity
     guid: dd80c4a7580e8494285031f4566bff45
