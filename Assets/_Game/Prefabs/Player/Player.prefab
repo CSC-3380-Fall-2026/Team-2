@@ -172,10 +172,10 @@ MonoBehaviour:
   playerDeathHandler: {fileID: -4397832600137239767}
   deathLayerMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 512
   floorLayerMask:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 256
   skillPoints: 5
 --- !u!114 &6910438200259848138
 MonoBehaviour:
