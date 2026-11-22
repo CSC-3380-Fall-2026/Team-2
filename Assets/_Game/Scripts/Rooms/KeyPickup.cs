@@ -27,6 +27,10 @@ public class KeyPickup : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         Player touchedPlayer = other.GetComponentInParent<Player>();
+        if (touchedPlayer == null)
+        {
+            return;
+        }
 
         IsCollected = true;
         startPosition = transform.position;
