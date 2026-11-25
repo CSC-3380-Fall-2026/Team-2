@@ -21,6 +21,6 @@ public void respawn(Player player) {
     roomCamera.SetPlayer(player);
     roomCamera.CenterCamera(roomData.roomCenter, roomData.roomBounds);
     player.restoreCheckpointPos(spawn.position);
-}
+    }   
 
 }

@@ -70,5 +70,4 @@ public class pauseMenuLoader {
         new GameObject("EventSystem", typeof(EventSystem), typeof(InputSystemUIInputModule));
     }
 
-
 }
