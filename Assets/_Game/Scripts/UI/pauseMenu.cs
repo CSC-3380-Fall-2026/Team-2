@@ -19,7 +19,7 @@ public class pauseMenu : MonoBehaviour {
     [Header("Pause Menu Panels")]
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject settingsPanel;
-    
+
     [Header("Scene Vars")]
     [SerializeField] private string mainMenuScene = "Start Menu";
     [SerializeField] private string[] gameplayScenes = {"Game", "Game 2"};
