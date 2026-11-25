@@ -56,12 +56,18 @@ public class Player : MonoBehaviour
     //Perk Stuff
     [Header("Shield Settings")]
     [SerializeField] public float numOfShield = 0;
+    [SerializeField, Min(0f)] private float shieldInvulnerability = 1f;
+    private float hazardImmuneUntil;
     //[SerializeField] public float maxSpeed = 20f;
 
     [Header("Death Fields")]
     [SerializeField] private deathHandler playerDeathHandler;
     [SerializeField] private LayerMask deathLayerMask;
     [SerializeField] private LayerMask floorLayerMask;
+    [Tooltip("How much of the player's radius must be over hazard to die (1 = the whole circle).")]
+    [SerializeField, UnityEngine.Range(0.5f, 1f)] private float hazardFootprint = 0.95f;
+    [SerializeField, Min(4)] private int hazardSamples = 12;
+    private readonly System.Collections.Generic.List<Collider2D> hazardHits = new System.Collections.Generic.List<Collider2D>();
     public bool isDead { get; private set; }
     public static event System.Action Respawned; //fired when the player gets control back after dying
     private bool physicsSimmed;
@@ -94,12 +100,14 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        //If player is not touching the floor, the player should die
-        if (playerCollider.IsTouchingLayers(deathLayerMask) && !playerCollider.IsTouchingLayers(floorLayerMask))
+        //The player dies only when fully over a hazard and not touching any floor
+        if (Time.time >= hazardImmuneUntil && !playerCollider.IsTouchingLayers(floorLayerMask) && IsFullyOnHazard())
         {
             if (numOfShield >= 1)
             {
+                //A shield absorbs the hit and gives a short window to get off the hazard.
                 numOfShield -= 1;
+                hazardImmuneUntil = Time.time + shieldInvulnerability;
                 return;
             }
             else
@@ -118,6 +126,34 @@ public class Player : MonoBehaviour
 
         currentState.Update();
         HandlePhasing();
+    }
+
+    //True when the centre and every sampled point near the edge of the player's circle are over a hazard collider.
+    private bool IsFullyOnHazard()
+    {
+        if (!playerCollider.IsTouchingLayers(deathLayerMask))
+        {
+            return false;
+        }
+
+        ContactFilter2D filter = new ContactFilter2D { useTriggers = true, useLayerMask = true, layerMask = deathLayerMask };
+        Vector2 center = playerCollider.bounds.center;
+        if (Physics2D.OverlapPoint(center, filter, hazardHits) == 0)
+        {
+            return false;
+        }
+
+        float radius = playerCollider.bounds.extents.x * hazardFootprint;
+        for (int i = 0; i < hazardSamples; i++)
+        {
+            float angle = i * Mathf.PI * 2f / hazardSamples;
+            Vector2 point = center + new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * radius;
+            if (Physics2D.OverlapPoint(point, filter, hazardHits) == 0)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     void FixedUpdate()

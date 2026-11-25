@@ -23,6 +23,27 @@ private saveFileHandler saveHandler;
     public static saveDataHandler instance { get; private set; }
     public bool isLoading {get; private set;}
 
+    //Set by the Start Menu's Continue; the next scene load respawns the player at the saved checkpoint.
+    public static bool continueRequested;
+
+    public static string SavePath(string fileName) {
+        return System.IO.Path.Combine(Application.persistentDataPath, fileName);
+    }
+
+    public static bool HasSave(string fileName) {
+        return !string.IsNullOrEmpty(fileName) && System.IO.File.Exists(SavePath(fileName));
+    }
+
+    //Erases the save file and resets any save manager still alive from an earlier run.
+    public static void DeleteSave(string fileName) {
+        if (HasSave(fileName)) {
+            System.IO.File.Delete(SavePath(fileName));
+        }
+        if (instance != null) {
+            instance.newSave();
+        }
+    }
+
     //Initializes the save manager, checks for duplicates to destroy.
     private void Awake()
     {
@@ -72,6 +93,17 @@ private saveFileHandler saveHandler;
         }        
     
         applySceneData();
+
+        if (continueRequested) {
+            continueRequested = false;
+            SaveData fromDisk = saveHandler.Load();
+            if (fromDisk != null) {
+                saveData = fromDisk;
+                if (!string.IsNullOrWhiteSpace(fromDisk.checkpointId) && !string.IsNullOrWhiteSpace(fromDisk.checkpointScene)) {
+                    loadFile();
+                }
+            }
+        }
     }
 
     //Pushes saved data into current objects in the scene.
