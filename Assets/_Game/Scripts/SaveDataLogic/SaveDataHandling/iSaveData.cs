@@ -10,4 +10,5 @@ public interface iSaveData {
     void loadData(SaveData data);
 
     void saveData(ref SaveData data);
+
 }
